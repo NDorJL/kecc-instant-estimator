@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Your Free Estimate – Knox Exterior Care Co.</title>
+<style>
+:root {
+  --primary:       #f68f2d;
+  --primary-dark:  #bc5f38;
+  --primary-light: #f9a550;
+  --gold:          #bc5f38;
+  --gold-light:    #d4784a;
+  --bg:            #f0f0f0;
+  --surface:       #ffffff;
+  --border:        #e6ddd0;
+  --text:          #3a3737;
+  --muted:         #7a7575;
+  --success:       #4a8a3c;
+  --r:             12px;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html { overflow-x:hidden; }
+body { font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+/* ── HEADER ── */
+.header { background:#fef4e2; padding:14px 22px; display:flex; align-items:center; gap:14px; border-bottom:2px solid #e6ddd0; }
+.logo-mark { width:44px; height:44px; background:linear-gradient(135deg,var(--gold),var(--gold-light)); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:900; color:white; flex-shrink:0; overflow:hidden; }
+.logo-mark:has(img) { width:auto; background:none; border-radius:0; padding:2px 0; }
+.logo-mark img { height:42px; width:auto; max-width:170px; object-fit:contain; display:block; }
+.header-text h1 { color:var(--primary-dark); font-size:16px; font-weight:700; }
+.header-text p  { color:var(--muted); font-size:12px; margin-top:1px; }
+
+/* ── LAYOUT ── */
+.container { max-width:560px; margin:0 auto; padding:18px 16px 60px; }
+
+/* ── PROGRESS ── */
+.prog-wrap  { margin-bottom:22px; }
+.prog-steps { display:flex; justify-content:space-between; margin-bottom:8px; }
+.prog-step  { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:var(--muted); transition:color 0.3s; flex:1; text-align:center; }
+.prog-step.active { color:var(--primary); }
+.prog-step.done   { color:var(--success); }
+.prog-track { background:var(--border); height:5px; border-radius:99px; overflow:hidden; }
+.prog-fill  { height:100%; background:linear-gradient(90deg,var(--primary),var(--primary-light)); border-radius:99px; transition:width 0.45s cubic-bezier(.4,0,.2,1); }
+
+/* ── STEP CARD ── */
+.step-card { background:var(--surface); border-radius:var(--r); padding:24px 20px; border:1px solid var(--border); box-shadow:0 2px 14px rgba(246,143,45,0.07); }
+.eyebrow   { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; color:var(--primary); margin-bottom:5px; }
+.step-ttl  { font-size:21px; font-weight:800; color:var(--text); line-height:1.25; margin-bottom:5px; }
+.step-sub  { font-size:13px; color:var(--muted); margin-bottom:20px; line-height:1.5; }
+
+/* ── OPTION GRID (property type, mode selection, question answers) ── */
+.opt-grid       { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:14px; }
+.opt-grid.cols-1 { grid-template-columns:1fr; }
+.opt-grid.cols-3 { grid-template-columns:1fr 1fr 1fr; }
+.opt-grid.cols-4 { grid-template-columns:1fr 1fr 1fr 1fr; }
+.opt       { border:2px solid var(--border); border-radius:10px; padding:12px 11px; cursor:pointer; display:flex; align-items:flex-start; gap:9px; transition:all 0.18s; -webkit-tap-highlight-color:transparent; user-select:none; }
+.opt:hover { border-color:var(--primary-light); background:#fff4e6; }
+.opt.sel   { border-color:var(--primary); background:rgba(246,143,45,0.08); }
+.o-body    { flex:1; }
+.o-name    { font-size:13px; font-weight:700; color:var(--text); line-height:1.2; }
+.o-detail  { font-size:11px; color:var(--muted); margin-top:2px; }
+.o-chk     { width:18px; height:18px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; transition:all 0.18s; display:flex; align-items:center; justify-content:center; margin-top:1px; }
+.opt.sel .o-chk { background:var(--primary); border-color:var(--primary); }
+.opt.sel .o-chk::after { content:'✓'; color:white; font-size:10px; font-weight:900; }
+
+/* ── SERVICE GRID (step 2) — compact icon+name tiles ── */
+.svc-grid    { display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:8px; margin-bottom:16px; }
+.svc-card    { border:2px solid var(--border); border-radius:10px; padding:14px 10px 12px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:7px; text-align:center; transition:all 0.18s; -webkit-tap-highlight-color:transparent; user-select:none; }
+.svc-card:hover { border-color:var(--primary-light); background:#fff4e6; }
+.svc-card.sel          { border-color:var(--primary); background:rgba(246,143,45,0.08); }
+.svc-card.sel-partial  { border-color:var(--primary-light); background:#fff4e6; }
+.freq-picker { display:flex; gap:4px; flex-wrap:wrap; justify-content:center; margin-top:2px; }
+.freq-btn { font-size:10px; font-weight:700; padding:3px 8px; border-radius:99px; border:1.5px solid var(--border); background:white; cursor:pointer; color:var(--muted); transition:all 0.15s; }
+.freq-btn.sel { background:var(--primary); border-color:var(--primary); color:white; }
+.sc-icon   { width:36px; height:36px; display:flex; align-items:center; justify-content:center; }
+.sc-icon svg { width:30px; height:30px; color:var(--primary); display:block; transition:color 0.18s; }
+.svc-card.sel .sc-icon svg { color:var(--primary-dark); }
+.sc-name   { font-size:12px; font-weight:700; color:var(--text); line-height:1.3; }
+.svc-card.other-card { border-style:dashed; }
+.svc-card.other-card .sc-icon svg { width:24px; height:24px; }
+
+/* ── OPT CARD ICON (property type, mode) ── */
+.o-icon { width:32px; height:32px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:rgba(246,143,45,0.07); border-radius:8px; transition:background 0.18s; }
+.o-icon svg { width:20px; height:20px; color:var(--primary); display:block; }
+.opt.sel .o-icon { background:rgba(246,143,45,0.18); }
+
+/* ── SERVICE DESCRIPTION CARD (step 3 header) ── */
+.svc-desc-card { background:rgba(246,143,45,0.06); border:1px solid rgba(246,143,45,0.18); border-radius:10px; padding:13px 14px; margin-bottom:22px; display:flex; align-items:flex-start; gap:12px; }
+.sdc-icon { width:42px; height:42px; border-radius:9px; background:rgba(246,143,45,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.sdc-icon svg { width:24px; height:24px; color:var(--primary); display:block; }
+.sdc-name { font-size:15px; font-weight:800; color:var(--text); margin-bottom:4px; }
+.sdc-desc { font-size:12px; color:var(--muted); line-height:1.6; }
+
+/* ── QUESTION BLOCK (step 3) ── */
+.q-block { margin-bottom:22px; }
+.q-label { font-size:13px; font-weight:700; color:var(--text); margin-bottom:7px; }
+.q-hint  { font-size:11px; color:var(--muted); margin-top:-3px; margin-bottom:7px; line-height:1.45; background:rgba(246,143,45,0.08); border-left:3px solid var(--primary-light); border-radius:0 6px 6px 0; padding:5px 9px; }
+
+/* ── CUSTOM INPUT ── */
+.custom-wrap .q-label { margin-bottom:7px; }
+.custom-wrap input {
+  width:100%; padding:11px 13px; border:2px solid var(--primary-light);
+  border-radius:9px; font-size:14px; color:var(--text); outline:none; background:white;
+  transition:border-color 0.2s;
+}
+.custom-wrap input:focus { border-color:var(--primary); }
+.custom-wrap input::placeholder { color:#A8BBBB; }
+
+/* ── BUNDLE NUDGE (step 1) ── */
+.bundle-section { margin-top:22px; padding-top:18px; border-top:1px solid var(--border); }
+.bundle-hdr     { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-bottom:10px; }
+.bundle-cards   { display:flex; flex-direction:column; gap:8px; }
+.bundle-card    { border:2px solid var(--border); border-radius:12px; padding:14px 12px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all 0.2s; -webkit-tap-highlight-color:transparent; }
+.bundle-card:hover { border-color:var(--gold); background:#FFFBF3; }
+.bc-icon  { width:48px; height:48px; border-radius:10px; background:#F5F1E8; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.bc-icon svg { width:26px; height:26px; color:var(--gold); display:block; }
+.bc-body  { flex:1; min-width:0; }
+.bc-title { font-size:14px; font-weight:800; color:var(--text); margin-bottom:3px; }
+.bc-sub   { font-size:11px; color:var(--muted); line-height:1.45; }
+.bc-cta   { font-size:11px; font-weight:700; color:var(--gold); white-space:nowrap; flex-shrink:0; }
+
+/* ── FORM FIELDS ── */
+.field         { margin-bottom:12px; }
+.field label   { display:block; font-size:13px; font-weight:600; color:var(--text); margin-bottom:5px; }
+.field input   { width:100%; padding:11px 13px; border:2px solid var(--border); border-radius:9px; font-size:15px; color:var(--text); outline:none; background:#FAFCFC; transition:border-color 0.2s; }
+.field input:focus { border-color:var(--primary); background:white; }
+.field input::placeholder { color:#A8BBBB; }
+.two-col        { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.two-col .field { margin-bottom:0; }
+
+/* ── BUTTONS ── */
+.btn         { display:block; width:100%; padding:14px 22px; border:none; border-radius:10px; font-size:15px; font-weight:700; cursor:pointer; transition:all 0.2s; -webkit-tap-highlight-color:transparent; letter-spacing:0.2px; }
+.btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:white; box-shadow:0 4px 14px rgba(246,143,45,0.32); }
+.btn-primary:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 6px 18px rgba(246,143,45,0.40); }
+.btn-primary:disabled { opacity:0.4; cursor:not-allowed; }
+.btn-gold    { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:#fff; box-shadow:0 4px 14px rgba(188,95,56,0.35); font-size:16px; }
+.btn-gold:hover { transform:translateY(-1px); box-shadow:0 6px 18px rgba(196,151,58,0.38); }
+.btn-back    { background:transparent; color:var(--primary); border:2px solid var(--border); margin-top:9px; font-size:14px; }
+.btn-back:hover { border-color:var(--primary); background:#fff4e6; }
+
+/* ── RESULTS ── */
+.result-hero  { background:linear-gradient(135deg,var(--primary-dark),var(--primary)); border-radius:12px; padding:22px 18px; color:white; text-align:center; margin-bottom:14px; }
+.rh-label     { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; opacity:0.75; margin-bottom:5px; }
+.rh-range     { font-size:38px; font-weight:900; letter-spacing:-1.5px; line-height:1; }
+.rh-range span { font-size:22px; font-weight:600; opacity:0.8; }
+.rh-note      { font-size:12px; opacity:0.72; margin-top:5px; }
+.rh-svc       { display:inline-flex; align-items:center; gap:5px; margin-top:10px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.35); color:rgba(255,255,255,0.95); font-size:12px; font-weight:700; padding:3px 11px; border-radius:99px; }
+.disclaimer   { font-size:12px; color:#5c3a1e; background:#fff3e0; border-radius:8px; padding:11px 13px; margin-bottom:14px; border-left:4px solid var(--primary); line-height:1.6; font-weight:500; }
+.disclaimer strong { color:#3d2410; }
+
+/* ── NEXT-STEP DIVIDER (results page) ── */
+.next-step-hdr { background:linear-gradient(135deg,rgba(246,143,45,0.1),rgba(188,95,56,0.08)); border:2px solid var(--primary); border-radius:10px; padding:13px 15px; margin:16px 0 10px; text-align:center; }
+.nsh-label     { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.6px; color:var(--primary); margin-bottom:4px; }
+.nsh-text      { font-size:15px; font-weight:800; color:var(--text); margin-bottom:4px; }
+.nsh-sub       { font-size:12px; color:var(--muted); line-height:1.5; }
+
+/* ── JOB NOTES TEXTAREA ── */
+.field textarea { width:100%; padding:11px 13px; border:2px solid var(--border); border-radius:9px; font-size:14px; color:var(--text); outline:none; background:#FAFCFC; transition:border-color 0.2s; resize:vertical; min-height:90px; font-family:inherit; line-height:1.5; }
+.field textarea:focus { border-color:var(--primary); background:white; }
+.field textarea::placeholder { color:#A8BBBB; }
+.guar-lbl     { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.7px; color:var(--muted); text-align:center; margin-top:14px; margin-bottom:4px; }
+.guar-bar     { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin:0 0 14px; }
+.gbadge       { font-size:11px; font-weight:600; padding:4px 9px; border-radius:99px; background:var(--primary-dark); color:white; }
+.cta-divider  { text-align:center; font-size:12px; color:var(--muted); margin:4px 0 10px; }
+.iq-box       { background:linear-gradient(135deg,#fff4e6,#ffe8c4); border:2px solid var(--primary-light); border-radius:12px; padding:16px 14px; text-align:center; margin-bottom:4px; }
+.iq-box .pv-tag { display:inline-block; background:var(--primary); color:white; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; margin-bottom:6px; }
+.iq-box h3    { font-size:16px; font-weight:800; color:var(--text); margin-bottom:5px; }
+.iq-box p     { font-size:13px; color:var(--muted); margin-bottom:12px; line-height:1.5; }
+.psr-box      { background:linear-gradient(135deg,#FFF8EE,#FFF3E0); border:2px solid var(--gold); border-radius:12px; padding:16px 14px; text-align:center; margin-bottom:14px; }
+.psr-box .pv-tag { display:inline-block; background:var(--gold); color:white; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; margin-bottom:6px; }
+.psr-box h3   { font-size:16px; font-weight:800; color:var(--text); margin-bottom:5px; }
+.psr-box p    { font-size:13px; color:var(--muted); margin-bottom:12px; line-height:1.5; }
+.bundle-nudge-bar { background:rgba(246,143,45,0.08); border:1px solid rgba(246,143,45,0.22); border-radius:10px; padding:12px 14px; margin-bottom:14px; font-size:13px; color:var(--text); line-height:1.5; }
+.bundle-nudge-bar strong { color:var(--primary); }
+.social-proof { display:flex; align-items:center; justify-content:center; gap:9px; margin-top:13px; padding-top:13px; border-top:1px solid var(--border); }
+.stars        { color:var(--gold); font-size:15px; letter-spacing:1px; }
+.sp-text      { font-size:12px; color:var(--muted); }
+.sp-text strong { color:var(--text); }
+.privacy      { text-align:center; font-size:11px; color:var(--muted); margin-top:7px; }
+.privacy span { color:var(--primary); }
+
+/* ── CUSTOM RESULT BOX ── */
+.custom-result-box { background:linear-gradient(135deg,#F8FBFB,#EEF6F6); border:2px solid var(--primary-light); border-radius:12px; padding:22px 18px; text-align:center; margin-bottom:14px; }
+.custom-result-box h3 { font-size:18px; font-weight:800; color:var(--text); margin-bottom:8px; }
+.custom-result-box p  { font-size:13px; color:var(--muted); line-height:1.6; }
+
+/* ── CONFIRM ── */
+.confirm-wrap     { text-align:center; padding:8px 0; }
+.confirm-icon     { width:66px; height:66px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:32px; margin:0 auto 14px; }
+.confirm-icon.psr { background:linear-gradient(135deg,var(--success),#3DAA6A); box-shadow:0 4px 18px rgba(46,139,87,0.3); }
+.confirm-icon.iq  { background:linear-gradient(135deg,var(--primary),var(--primary-light)); box-shadow:0 4px 18px rgba(246,143,45,0.35); }
+.confirm-icon.bun { background:linear-gradient(135deg,var(--gold),var(--gold-light)); box-shadow:0 4px 18px rgba(196,151,58,0.3); }
+.confirm-wrap h2  { font-size:22px; font-weight:800; margin-bottom:7px; }
+.confirm-wrap > p { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:18px; }
+.next-steps   { text-align:left; background:#F8FBFB; border-radius:10px; padding:14px; margin-bottom:14px; }
+.ns-head      { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-bottom:9px; }
+.ns-item      { display:flex; align-items:flex-start; gap:9px; margin-bottom:9px; font-size:13px; color:var(--text); line-height:1.4; }
+.ns-item:last-child { margin-bottom:0; }
+.ns-n         { width:20px; height:20px; background:var(--primary); color:white; border-radius:50%; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.price-lock-bar { background:rgba(246,143,45,0.07); border:1px solid rgba(246,143,45,0.25); border-radius:9px; padding:9px 13px; margin-bottom:14px; font-size:12px; color:var(--text); text-align:center; }
+
+/* ── CONTACT BLOCK ── */
+.contact-block  { margin-top:16px; padding-top:14px; border-top:1px solid var(--border); }
+.cb-name        { font-size:12px; font-weight:700; color:var(--text); letter-spacing:0.2px; margin-bottom:9px; }
+.cb-row         { display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:13px; color:var(--muted); }
+.cb-row:last-child { margin-bottom:0; }
+.cb-row .cb-icon { width:16px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.cb-row .cb-icon svg { width:14px; height:14px; color:var(--primary); }
+.cb-row a       { color:var(--primary); text-decoration:none; font-weight:600; }
+.cb-row a:hover { text-decoration:underline; }
+
+/* ── TRANSITIONS ── */
+.step { display:none; animation:fadeUp 0.3s ease; }
+.step.active { display:block; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── RESPONSIVE ── */
+@media (max-width:480px) {
+  .container { padding-left:10px; padding-right:10px; }
+  .step-card { padding:18px 14px; }
+  .svc-grid  { grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); }
+  .opt-grid  { grid-template-columns:1fr; }
+  .opt-grid.cols-3 { grid-template-columns:1fr 1fr; }
+  .opt-grid.cols-4 { grid-template-columns:1fr 1fr; }
+  .two-col   { grid-template-columns:1fr; }
+  .step-ttl  { font-size:18px; }
+  .rh-range  { font-size:30px; }
+  .prog-step { font-size:9px; letter-spacing:0.1px; }
+  .header    { padding:10px 14px; gap:10px; }
+}
+
+/* ── EMBED ── */
+body.embed .header    { display:none; }
+body.embed .container { padding-top:4px; }
+body.embed            { background:transparent; min-height:unset; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-mark" id="logoMark">K</div>
+  <div class="header-text">
+    <h1 id="cfgName">Knox Exterior Care Co.</h1>
+    <p id="cfgTagline">Serving Knoxville &amp; Surrounding Areas</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- PROGRESS -->
+  <div class="prog-wrap">
+    <div class="prog-steps">
+      <span class="prog-step active" id="ps1">Property &amp; Goal</span>
+      <span class="prog-step"        id="ps2">Pick Service</span>
+      <span class="prog-step"        id="ps3">Details</span>
+      <span class="prog-step"        id="ps4">Your Estimate</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:25%"></div></div>
+  </div>
+
+  <!-- ════════════════ STEP 1: PROPERTY & GOAL ════════════════ -->
+  <div class="step active" id="s1">
+    <div class="step-card">
+      <div class="eyebrow">Step 1 of 3</div>
+      <div class="step-ttl">Tell us about your property</div>
+      <div class="step-sub">Takes under a minute — helps us show only what's relevant to you.</div>
+
+      <div class="q-block">
+        <div class="q-label">Property Type</div>
+        <div class="opt-grid">
+          <div class="opt" onclick="pick('propType','residential',this)">
+            <div class="o-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5L12 2l9 7.5V20a2 2 0 01-2 2H5a2 2 0 01-2-2V9.5z"/><polyline points="9,22 9,13 15,13 15,22"/></svg></div>
+            <div class="o-body"><div class="o-name">Residential</div><div class="o-detail">Home or townhome</div></div>
+            <div class="o-chk"></div>
+          </div>
+          <div class="opt" onclick="pick('propType','commercial',this)">
+            <div class="o-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="2" width="18" height="20" rx="1"/><path d="M9 2v20M15 2v20M3 8h18M3 14h18"/></svg></div>
+            <div class="o-body"><div class="o-name">Commercial</div><div class="o-detail">Business or investment property</div></div>
+            <div class="o-chk"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-block" style="margin-bottom:0">
+        <div class="q-label">What are you looking for?</div>
+        <div class="opt-grid">
+          <div class="opt" onclick="pick('mode','onetime',this)">
+            <div class="o-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 15h5M8 18h3"/></svg></div>
+            <div class="o-body"><div class="o-name">One-Time Service</div><div class="o-detail">A specific job, no commitment</div></div>
+            <div class="o-chk"></div>
+          </div>
+          <div class="opt" onclick="pick('mode','sub',this)">
+            <div class="o-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+            <div class="o-body"><div class="o-name">Single-Service Subscription</div><div class="o-detail">One service on autopilot — not a bundle</div></div>
+            <div class="o-chk"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bundle nudge -->
+      <div class="bundle-section">
+        <div class="bundle-hdr">Or — want full-service coverage?</div>
+        <div class="bundle-cards">
+          <div class="bundle-card" onclick="goBundle('tcep')">
+            <div class="bc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16V8z"/><path d="M3.27 6.96L12 12l8.73-5.04M12 22V12"/></svg></div>
+            <div class="bc-body">
+              <div class="bc-title">Total Care Exterior Plan</div>
+              <div class="bc-sub">Bundle 2+ services, one flat monthly rate.</div>
+            </div>
+            <div class="bc-cta">Get a Quote →</div>
+          </div>
+          <div class="bundle-card" onclick="goBundle('tpc')">
+            <div class="bc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+            <div class="bc-body">
+              <div class="bc-title">Total Property Command</div>
+              <div class="bc-sub">Your entire exterior, fully managed. Zero hassle.</div>
+            </div>
+            <div class="bc-cta">Talk to Us →</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="next1" onclick="goTo('s2')" disabled style="margin-top:20px">Continue → Pick Your Service</button>
+    </div>
+  </div>
+
+  <!-- ════════════════ STEP 2: PICK SERVICE ════════════════ -->
+  <div class="step" id="s2">
+    <div class="step-card">
+      <div class="eyebrow">Step 2 of 3</div>
+      <div class="step-ttl">Which service do you need?</div>
+      <div class="step-sub" id="s2Sub">Select one service to get your estimate.</div>
+      <div class="svc-grid" id="svcGrid"><!-- injected by JS --></div>
+      <button class="btn btn-primary" id="next2" onclick="goTo('s3')" disabled>Continue → Quick Questions</button>
+      <button class="btn btn-back" onclick="goTo('s1')">← Back</button>
+    </div>
+  </div>
+
+  <!-- ════════════════ STEP 3: QUESTIONS ════════════════ -->
+  <div class="step" id="s3">
+    <div class="step-card">
+      <div class="eyebrow">Step 3 of 3</div>
+      <div class="step-ttl" id="s3Ttl">A couple quick questions</div>
+      <div class="step-sub">Helps us calculate an accurate range based on your specific situation.</div>
+      <div id="questionsWrap"><!-- injected by JS --></div>
+      <div id="customWrap" style="display:none" class="custom-wrap">
+        <div class="q-label">Describe what you need</div>
+        <input type="text" id="customInput" placeholder="e.g. Fence staining, moss removal, awning cleaning…" oninput="handleCustomInput(this.value)">
+      </div>
+      <button class="btn btn-primary" id="next3" onclick="goTo('s4')" disabled style="margin-top:4px">Continue → Your Info</button>
+      <button class="btn btn-back" onclick="goTo('s2')">← Back</button>
+    </div>
+  </div>
+
+  <!-- ════════════════ BUNDLE: SERVICE SELECTION (TCEP only) ════════════════ -->
+  <div class="step" id="sBundleSvc">
+    <div class="step-card">
+      <div class="eyebrow">Total Care Exterior Plan</div>
+      <div class="step-ttl">Which services do you want included?</div>
+      <div class="step-sub">Select 2 or more — we'll bundle them into one flat monthly rate.</div>
+      <div class="svc-grid" id="bundleSvcGrid"><!-- injected by JS --></div>
+      <button class="btn btn-primary" id="nextBundle" onclick="goTo('s4')" disabled style="margin-top:8px">Continue → Your Info</button>
+      <button class="btn btn-back" onclick="goTo('s1')">← Back</button>
+    </div>
+  </div>
+
+  <!-- ════════════════ STEP 4: CONTACT ════════════════ -->
+  <div class="step" id="s4">
+    <div class="step-card">
+      <div class="eyebrow">Almost there</div>
+      <div class="step-ttl">Where do we send your estimate?</div>
+      <div class="step-sub">We'll reach out to confirm details and lock in your numbers.</div>
+      <div class="two-col" style="margin-bottom:12px">
+        <div class="field"><label>First Name *</label><input type="text"  id="fName" placeholder="John"                          oninput="chkContact()"></div>
+        <div class="field"><label>Last Name *</label> <input type="text"  id="lName" placeholder="Smith"                         oninput="chkContact()"></div>
+      </div>
+      <div class="field"><label>Email *</label>            <input type="email" id="email" placeholder="john@email.com"             oninput="chkContact()"></div>
+      <div class="field"><label>Phone *</label>            <input type="tel"   id="phone" placeholder="(865) 555-0100"             oninput="chkContact()"></div>
+      <div class="field"><label>Property Address *</label> <input type="text"  id="addr"  placeholder="123 Main St, Knoxville, TN" oninput="chkContact()"></div>
+      <div class="field">
+        <label>Tell us more about your job *</label>
+        <textarea id="jobNotes" placeholder="Describe what you need done — any details about the condition, access, special requests, or anything that will help us prepare an accurate quote." oninput="chkContact()"></textarea>
+      </div>
+      <div class="field">
+        <label>How did you hear about us? *</label>
+        <div class="opt-grid cols-3" id="hearGrid" style="margin-top:6px">
+          <div class="opt" onclick="pickHear('Google Search',this)">    <div class="o-body"><div class="o-name">Google Search</div></div><div class="o-chk"></div></div>
+          <div class="opt" onclick="pickHear('Referral',this)">         <div class="o-body"><div class="o-name">Referral</div></div><div class="o-chk"></div></div>
+          <div class="opt" onclick="pickHear('Social Media',this)">     <div class="o-body"><div class="o-name">Social Media</div></div><div class="o-chk"></div></div>
+          <div class="opt" onclick="pickHear('Mailer',this)">           <div class="o-body"><div class="o-name">Mailer</div></div><div class="o-chk"></div></div>
+          <div class="opt" onclick="pickHear('Digital Ad',this)">       <div class="o-body"><div class="o-name">Digital Ad</div></div><div class="o-chk"></div></div>
+          <div class="opt" onclick="pickHear('Other',this)">            <div class="o-body"><div class="o-name">Other</div></div><div class="o-chk"></div></div>
+        </div>
+      </div>
+      <button class="btn btn-gold"    id="showEst" onclick="showResults()" disabled style="margin-top:6px">🎯 See My Estimate</button>
+      <button class="btn btn-back"    onclick="goBackFromContact()">← Back</button>
+      <div class="privacy">🔒 Your info is <span>never shared or sold</span>. Local business.</div>
+    </div>
+  </div>
+
+  <!-- ════════════════ RESULTS ════════════════ -->
+  <div class="step" id="sResult">
+    <div class="step-card">
+      <div class="eyebrow" id="resGreet">Your estimate is ready 👋</div>
+      <div class="step-ttl" id="resTtl">Your Custom Estimate</div>
+
+      <!-- Standard priced result -->
+      <div id="stdResult">
+        <div class="result-hero">
+          <div class="rh-label" id="rhLabel">Estimated Cost Range</div>
+          <div class="rh-range" id="rhRange">–</div>
+          <div class="rh-note"  id="rhNote"></div>
+          <div class="rh-svc"   id="rhSvc" style="display:none"></div>
+        </div>
+        <div class="disclaimer">
+          <strong>Ballpark range only — not a final quote.</strong> A specialist will confirm your exact price after reviewing your property.
+        </div>
+      </div>
+
+      <!-- Custom / bundle / other result -->
+      <div id="custResult" style="display:none">
+        <div class="custom-result-box">
+          <h3 id="custTitle">We'll prepare your custom quote</h3>
+          <p id="custBody">A specialist will review your request and reach out shortly.</p>
+        </div>
+      </div>
+
+      <!-- What happens next -->
+      <div class="next-step-hdr">
+        <div class="nsh-label">🎉 You're Almost There!</div>
+        <div class="nsh-text">A team member will reach out within 1 hour!</div>
+        <div class="nsh-sub">Expect a call or text from our team to confirm your numbers and answer any questions. No pressure, no runaround — just straightforward service from a local crew that shows up.</div>
+      </div>
+
+      <div class="guar-lbl">Our Guarantees</div>
+      <div class="guar-bar">
+        <span class="gbadge">✅ Zero-Risk First Month</span>
+        <span class="gbadge">⏰ Show-Up-Or-Free</span>
+        <span class="gbadge">🏆 Match or Beat Any Quote</span>
+        <span class="gbadge">🔒 12-Month Price Lock</span>
+      </div>
+
+      <div class="social-proof">
+        <div class="stars">★★★★★</div>
+        <div class="sp-text"><strong>Knoxville's number one exterior care company</strong></div>
+      </div>
+
+      <div class="contact-block">
+        <div class="cb-name cfg-legal">Knox Exterior Care Co. LLC</div>
+        <div class="cb-row">
+          <div class="cb-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.8 19.8 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.8 19.8 0 01.09 1.2 2 2 0 012.08.01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg></div>
+          <a href="tel:+18653813169" class="cfg-phone">(865) 381-3169</a><span>— call or text</span>
+        </div>
+        <div class="cb-row">
+          <div class="cb-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <a href="mailto:office@knoxexteriorcareco.com" class="cfg-email">office@knoxexteriorcareco.com</a>
+        </div>
+        <div class="cb-row">
+          <div class="cb-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+          <a href="https://www.knoxexteriorcare.com" class="cfg-website" target="_blank" rel="noopener">knoxexteriorcare.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /container -->
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// ✏️  BRANDING CONFIG — Edit this block to update company info
+// ════════════════════════════════════════════════════════════════
+const CONFIG = {
+  companyName: "Knox Exterior Care Co.",
+  legalName:   "Knox Exterior Care Co. LLC",
+  tagline:     "One Call. Every Service. Home & Commercial.",
+  phone:       "(865) 381-3169",
+  email:       "office@knoxexteriorcareco.com",
+  website:     "https://www.knoxexteriorcare.com",
+  logoText:    "K",
+  logoUrl:     "data:image/webp;base64,UklGRmwnAABXRUJQVlA4WAoAAAAYAAAAYwAAYwAAVlA4TIsmAAAvY8AYEE0wbNs2UmQHfc7df+H7Vojo/wTw34D9YHPvBvbtbLhJSlLtFuhAcJWE1OVYug0Jvd4KchcDQQJgBtQYg8t+oAKcl48LtpEkNWpEAOQfnbQozDfxXqXgOJJtVWn8Ll8I5B8RS4evt3CHchxJkqPk7t41WmvNE/8twgQsOPo/AfhdoKMDle7p4BxRoSC+Ibxvqr6Pn1NqTOZ7NP8gQgCQXKWPx7WM9/ov6egIjhPGAL0cJEeePAmOJOXHFHwhOQJgzpErAIQRHKsKAEfOAIDQOVJRsWXJkoU63ixPgOSqm99j13fzLic/thcdx3YBwDHxGwBgSodHQk/PmMER46ev4lDQtg2Tlj/s7iKIiAngr3KPwjkwIJBt1Sjy2o72/4tkK9+/lLUdt4tnbvtwXQebYAGwFlsNkbt0z3R16T+Ynurqaly/GZq6u0vkDr8Yy9yvhFh2/R6pEI8vEQ/hXcE/wybFZQcOJ0MC2pEku7aV7F77ocEJ/DeMPy3v3at9RZJk27ZtW2pRx/s9QA0OE8AEN4FMDJPERPBq6ZStbVMbOfVVCW1ZYHbPjO2BZqYwMzMnl5ArSHY5WWeZi8iOmZlxGJrb2GZLskU1AX79/z9sS9u237/+VTU8VXOsMc1ltG3btm0jMrLehE5t2+5e9lrTnsMsjar6t3t0b8Ev6y1Qxg1wH3Zlh4/0iI/QZqQRHXvgI1pbcPgY4aGQG9BHaKSdULq2bW3j3O/7SbLMY2dip0MuMzMzM7crxh38tS65XTEzY5hMiWPB9710bGtTJDnv+yIyi2uYmWkLIldHlrbEsA55WoDWIJ9lDXMfhqqKyPgpUNt2vJGe9/vz/0Ft27bOFmvbtm3btm3vjm3btd1m4rbBz28CaFsAQLhyMjOxr43atm3btm13bdu2bdv2tZmb5CKZ3KT+hnlaZt9U21ylzJ5uatvWukzP2dq2ucoH1NaUt/te21b2nD4tXiRJkqRIknpkdS8z/v9le2KGwd0qd9RIkiNF7nkKx5/h/WzRoW3btC31dfa9D99l265KbSNyZrsqt0JHdlXGyLZt23x+7+y9JgCAT2oQAQwBnAgKIgyQQGxE6IlEyP5RkJC/EgYdU4v3bFiCOvAzGJdHLWoxm4kwH4SlQ9in79eMXlpG6JISZIIaBSgKz4WbL7vO64F2eR2BASAktxM991EEEvUEdM9FNE6zIWmHFaS8jQwU00Y10csdxJlT6RCbZCerQhZQKRhWnZvZQTENR3sedeDRX3hy086VD2LjQjWcQIhjIbxN6S5QK+GrqOZdNZtKvvpBnhq0tLtzs6q4tyCOkiKngmgCHbFARYPpv1+kztTXR7ZDDzj9BzeLBiacaPaIbkmw4lU0l2FI19XMunP53tWtuHpBtSBUnaKdiYnpYS5Gg7NT8Sptn/9/D7a5/XHqsHfGknchhCk3iNPXdq8dj5cP1l3DOa6N0/sNgsRRpx9uVl6Z/e83t9jcYk031RXTIZzEVl3IXhezcVXEw5UyLRmhwhQt1YWkrqhuY0yojGkSKLXiYL6dL/K6pXrAYwkkQj9Y98bv5/rf193OvNW3+QNsbfVBZ9gUD/zqXqTb1FjXh++3C37OH/Xar583qt7r2AR1XinYnTB5Yolb3qtnd9WMXjUDh7PHpQjRrIQ5E/TASAAx2xnlBHNtg56O5HA3G0KTWjT7zGTZ2fT5+nbQxRVkI5CDAjDM+/r6g2Y/Tjfn7WfvZ/hwPs+jOY6yUjrUcZOsdFVS78KCfTDm8uoGUrjUIFuMhFzQ0nV5W5z9e2GIWyq5n/Vx3Kju6eb9dilzfv/B7mEjPRIRd06xp/LCp/+I+AOc3VriAd08fMy5q/eI+G8xF4FPfvskiY0Ld0WAwp124jon5tV7swASWmxfP7erDi46v62Er3UM4GcusF/HRqSwkvXl5He17LRFVSsTd31N/2H6AeyTCyiCC1u9EMOF5Fld6Lmd/V9w1W7HginISd8hzzeL1exB3z6ZcGx+uviw40fgBKl8aCa31J++9yc4Yiac7Nk+NvxMSF6ohnDhqhg/6W2M2jK/1h2hblQH07uYWjMu6VXfHrDrkfUjP3uqzvgNdLhY+Jmwg2rDiIJSTG1CYV2zBeriJIJ0JkKLywDyHrZ+lVWZ7ArRe9nUtr61ACfZs5s6pDJGV/52evbd4uygglEB6YgG8yRIfgxE80zlU11VUAgpg/ddtK7Nj//PY06fAjHAAjkgMfC9JXaCVyyjw3HawdWgE5bAXzNjO8GINhEstY7Ud3FZNwhABBBUIBLCo/aD+QZIMAjCvLzNENloY05/IxyEnMozRg/vnovRqhDFJdKBH6NqrdsS/IIos1hVhEzRiUKma1xNNgw8+ION9wWFFQqPgckABQwhj4hgoncC6IgoxL1IRJqdA5JqQAHsdVlYBRGRYW2fQg3mvsME1elV54ZsIHQDBQC0fJ5zouKq0uobOqvY5SQAe2JaTQzp82xExP/agZ6zvNVW5WuQYEnztP3Tb+ATiSteefYtIZDEJ1hI/LsI84EpYo1Knd/mmfnvO710YtPyd06fRCDoIZFPE2sIlapOQj1H/NSaFBQJwUzQLcE5wPBjmjZmlJo2SvwYaJI/qpUuW95NXl4j1mfrZvHe/lKnm5rDpQD/Tvy6CX9Afy+nOupk+9KU4T+sIt5JmPSXPl/o1Hh8/v5wudcNsTQkiUWobftpe9tWWsVWPpDTO6SQg/zMSjAdglkQq4s+Zlw76lfqc+0S1/x4F/4pB/wVgyMdRNndNRbV8bIeoWDjwMqr0wUnq+1opKjGc0dXrHhT98ZqpT5b2dqni9jq0YVX45zaXWeWrtqz+pgfoB53xP7pOuuOpZbS7qY+PEs7R/fiiqpUlRwhenPMc5M2FUUjC4laaWmPJYAhjZhkLoqweDsar/i7X1Tdqqf6vGAk4vFcJAD3VizIYp6iC1Sf9UsS5jpQarF9PXv2myCwlirhXBBkEsLsI9XhsIs4a4mr9i5ZfPD+zjHtdyc2/+1ILpPc0/Fx8FrQqwIt5a9Fl64jm/+lBImHCFcpfbrDK5ZSmwXLvBQKTnXNPtZcXGz2ayDN1hiqMScXIzMFksAyE/alXeaNRDMgpVqlOiSFdVqwpISWlm6KyrcS/j83QnAuO47S2aJIe5ZYhGml6tBPzUk47RPW9S93dsm2icurW3MjtyuDtx3OayadyjAB0Z0pQgyaa1/0PxrSSw3dRPJ7ZbCMN08toJFcBmIbWggqM4sE5zIVMgS7XVk1EjXX4BgWpHoqss38ef/vbGeGQL8/t7iEeJVZMPF2kS8DjuDv7AeYAPmG8P/EoFxQwZhihWTy6nKNyPyYpB6FOVwhx9+8pMQSjfawLH9sk9uT4GzmJERZHczGrbQRiqhZ76+Eo3/Yre36efJdi/W7Rsum1Y0WLAnRK6AJMkBgxARTIJcDRG2ABZgmSR3t7TECDhCJoCaGiTpzf22nrsQdKD9mZgszG0o0FRe8obsUgIhKKnBgAsQKH2+DP+Ixn6dgkBq05oEfai5OiyoaBvCWGB1paxuD0/yXYdlHCOGvmojX4XwJa0mFdQftav1FywEOhYbDEadDYIL1vSag2tBNlW65YAaao4JEQDKRQgVulujgJYEBTpAS2XR25MXl0UU7/51DfHNH8lNpRXpEvBa5xn2IXPfp1Z+Odi8WOEIoNKoyaiGzAHgb2CCJm7D3iltn/8p/WvJiWipKy6U5AHupONkJ4QBbuv6NIUozQESWJNFjEmtFZCCIEVZlYgVgConHTkUmCxRLMAsITCHOxJjADHDoZvmNFtaokxpoLi52mwuIoZliFi8X0SPrzy/w+mOJ+RTXOz+n1lXeSZLbE+k8jOPe/D+07WuHmyuOOxOAFnZ0jHfYzzE8daIqQHwLJEcxN+3/32XbCnB8t2rGemR9haWoI67aiyYOtwwbEYghEycyUcRNFRNLB4a31WaSMtGdKoMYOkNCCwoNMyQBMSYBS4NZoQvED2KfjK0eDa9hpgV7bueRyXS2tOynIZcUVpFuWTN+olJXg2XpjigEwnQ/tWRd6Ce9/qfnqDdeYrFj6eLCeKGz3cBZBvZU/QX+AxREbQBuSq5ezhelJZNYghbnM1ueXdyKs5oql/gQALrQ6UJ3xcOsZdapwsNgJIDxQAZWKqKWPvpEd4v3vS8Kyw7OlDER46yDLPZ2R1UfajKZAsTCNi1LavivrWVzDrp1da5UOEXxxFtSD0SJbc13NuN7yY6L5/z14Jg3mLmnLuCz3kYQNFpQq3pkjefb+4fcVfoWXIpT9g7xOAP0gnYl4GRBvke8CYhKZIfZBHMJamij3zB+yw2nyP+0ciHwozUZ9ouk2+8glITWtGofoihEcbRoMBRCSBqa6VP6CEhMIWE2VpdvL57d4orTfSPcibPF+dKmR8ehEbrODW4+ERPZMtyM1g5ZNJ8J6dDU7/483La6/Xt5erK9fqW/RdCOkrO1rpZVCHxc4Os6FKs5cuQwzpNypyclDI+ZJSoMxYneEy6Jnw89n6927XDFoBd6BZ4BPg30UwH31Bvg7H2GgQgQtTG1UfYYqEETioIGaGaTpJXebnKc5ut78iP5f5TNGEEiwEBKYKg5iyBSQKRaYs4p1kSwKItJ8L1ZyOc2qXLE2q77lUPnLU8eLDmZXqai8S2ub9/k4dpbNtB8ejB09h+LlOWL/QAqwC/1n6tgyPKYonKs8wdBqd09RlbqCUu7dlQIZFTlbg2orO0GbwSKQ6CT+PeSgpUneb14l2kwAWgFIwa4HfhZgHsnexb/AKKgagQHQHjrp2duHq8mqPxpE2xg/rzmoHKsQRsaITwMbepMl02Mj1z3xWEnMkw4/JRodesqAUJwMOnDRem+SrG0utppKOGadVC2bnPp6y+R/uYTilqBZ34a1fllbm6dpXR1S2/64ata8e2vAwDvo/7W87YF/jrXmg1V0Cg8KRvKuIIu3dbUUm3LGHmDAhMBEUC5yPhq1HTs5Kp+Ot9pOgnoA6MD0AIYD7gU9AdA7lv/gI/48ds+nrhre+de8u+OfWfbu06sUY/QgDJ3TWweZTVPG2o9qk7SNO8re97JXAHAgCrBPiQMVLL80d+uG//xCXfUnVPlYuTwur1OW/54vi+8efw4yNf36eoXl2Tvl7Df0b5M7xepdBHqdcBbnI4aUZ1Z90C01XEYJmZabqeuX6k0VVEVObdRqULA+AQEAC6g4DIuC7zdwNRAFjwRQN8MRBmWDAu/auPG0dQYTLc5p3Sx7JjQYtFHxnI8iqIgQ4CC7sKacPvUYIsIwmGWPnh2X7lVwDB+P3PpeeeQA5Z31Ybk2HS8v214vTeed/ZsHD6D97d9Bn5nR4NPivCVccGO00/6+nMY+F+8S+UJOKgG00l5q0CVDKuTMdwy8X/fc4RD46qzM5fpwJHsk496Z0sCQwf0aZiSWdiCEbxRwcZc0IgREI70heX5P779nB0ZqAlTHxeJTDhqJKq/+GDEk2PRdQJ4nUgbGMLQ53q7z+xW35+M+jIzdx6BZqB1oIne/cv7ZIZ4f9g3bbZWPhv+07Gp7kUpuC5g4yAk9LPgB0GxFZsEV5yNBanewnnzmd3yJK6tZxkJK2ioagPQmrB10HLthLWf5tE25VMb0jqFuXgSPHhABBiwcGBERIA/MhZZEvHJACaOSWXCY1WsRIuKQPb31FykykqoArtQzrYgIXJs5WLVQDM4iqUbXwYEWdjAwa3t6a5f1GnkmmyA/G1k55q+YhRcmvMqCrXghiEaJvjFArVIeK0K+FADoVJRKdJVgcMp4t7Ri7rmfTPLoEAMa/XUwM9iZSWUQXpjAgE8yb1ToaRlLlpMZEIxxMHFkREL2egLMR8fM3ANCuhuapCYuZqnjaxOiTKvAdzQlfKswkIeAQLdf3oQx8U6OR4lqFflqhSHnAJP3JXXsMQequZzgtEQPCBSRBIVdBiguTvEAAggo/7oxkKqepjBxAOX3UZDeRSEkLhsRWRBZkTBH+fEQ0Q88kdpWCMWNQT88IVaW21PgWVezNJ1iC0MVXJ5R4XtcbBlMg5pI6r7EHUSALQFIgoiWaDIOnpODeoQIYRSidylLAE3c7M2nOEISV/oYIMGMAbAZT+/bGMGU1jDFA2YhmWe9sTPDdq399nOFqWRFgFMYAQ0WUwoBEcVkwGBTPTKGGH4zX5UQZeR9ZkXovM/KzA+LxZEDje3nAYRWh41IqLNAhpeWcaqqsQnV2HUkByEeBUrlgDRB7xQhmZGdFdwTFWBSKQ4tGnWO/rBUz8jLDR/XB10S2tFk3WfRvqGEfTF3ERA043+aHpCSOObbBUz6XLx8tZWLbMul2AIB93brZQToHDl4r1QkXCHl0ZrkeI1LhjQRsR8AWDHLSg46e5gOpVFMQUXyrb6YJOFCfEWEuVlQuOZg6jI2z8tRX5G3HByScEYLQCkE4SCNeIeVKNtDISPIGYlBMZ2JqhgEidBsFUM+EFshCR9Y/nu22G73fq/LRMWYestsQoAA1KmT6rC02HHJGt85hslSQXlTWPmLmtcSa08NRsO+CMndl6Jhqc68QeWORe0fZouqoVcFHh4FUHQRC0OpK/3Zh6yMFwFJqK+wLg1xjALpaUWHUxgRAuv9+iSSsoU5XaR0DSXhEFo+mBYdNzDty0jQaAfARCkGWlTIl2XqjexinHQshU2FaQnebYfIt6Jt/MhabUYZCnS1BQmU8B3/WUd9xePs+h8oQM98r0+zIBQymDjIB5AjvUUHzWMBa44WUJFAPn+OqEqXHCQdVU16vjo8HZbnKwBRUBZGJEREiuaVawPUCY+u4pK2I0Lq6iMcFWdkeoaKxPAWI9VZQO6IDv4PB465HnH5YuPH31VRkMI0g/54yqnvcGc7eoUn2lSiYSEKvKG1UTGS3TF0kjVBAYD50wMLvGQBAzUMBD0IJbgAYrYXXrKjiCgT7T9qheEM//5ooZAYKp/LB1P09M4YWED4IBgpT5s5idpk1Yvmxi+hC/9D4agbkYHv+ewQDaRDIXI9IhsOVYdwqHr08gkEOQseMJd+PC2lOFQ9aOn2g4P+VO8sn9zFciEZFsEKH9Ke3wsVzw1KP+UYqEyElMrkI8kLpFT7ytZJF6ipVGuFRZZK5o0oS5LGSuzESlLSKiG6ATnHVE29aZkFjKxiQgGCol9zDuSsGnfFguZoqo3AZn7BxIeiGjxJRvt5cr2she6SwHjnYHlYwkBurjOCvbMEJhg8E8kHjgzUvo2ki0EJUNjmfpZn1XXgSA00o3LObgL6pDdZ14DNUBV0tKcfF8CYWnLpuqrcqHpP8+Z4vVWge13I5TgaD/TQYYM0UB7mshoUMW66nKE5PUW4hYSsjCx7rpc00OhaP4yieDxUtZ4RcjK3pRA6flJddgAs0Hk2cerpLfnTXeMcXIhClFp8skVFKByhiZZc6QzO3qeqMJvwCvRFXkkognFRLQSvvoRN9sbn/8D7v/zXE67CayOZ/2+l7kanEAG48Az7b1hBxG4+PxzRC6D5XMelF17h550+5kFIT4CqZcW4B4MR9jHS1SWBU5/Ls2tq3DHdFxOZAUKRoeCiE3Nks42+yZd3sDlHWxfl8EIC9UWNmOw7igc09tYf6HlotRpYpLN0QPYqi7Ld/7GniYalCbe5om1sYaF+LRlQ8cML4VxmZiDG93hZFzhBRkfh/u4ijO5xWuAaXtZT0oaRUz0DbFMm65UG5sz0wYoQAEYAgxQNga2mBEaMZFWYqdsI3OZO0+FwMa5QZAgRyt/xw+vG57a1eP4z2B4zuDcc/2XXmkQKDhcRF5Gw3odPieDjooYEAMIXTyg+Ly+CtTM/bpGn6CiYRctcwQAkhoCtiIcebfjLXDlkbOvoQICEHLVkrCJ58jMqlx95sIY9eZDYrPS6IXyBjC+2XZ3X/+3qcf/eoTMgo5AiRnwIhQ3i/t/VjVVpIS5zwSDoOde7ZioaoMGjrCSk2/LZArgwlzIJhZwgbtBeAR/6fXXPCpoL1xdmpAs1Cvu2SZE1sGjTWxGsjBIUrHKmsKP5QhwFN7GovOzIX7uXQ6WckmWYYmkV7BgDynF5EceOGNDec91D2eLm6ldHwYIBFcNMY4O+N+w/PtUOiKu3/XZ9ZfX0yOwiqZrBv0K7xHC/MmocURYLtueTSq9oGiGN6ih9At9fGgGJYx6ZaGD73GwQo+q92uTtTUNjbxfDVtiSYRpowqHSd9GiHRhM20sJl5+NHCdkydpEfsBCSKR1eCaZ05rIrwduwR5usFN9yNCEVdtL/YMB2/ZliddVdGWbzBG7qMAiXaSbd0hgOQ/BG6jFDMh1Uo6iJ6XRPBmCoB4/WVBEQ1LIo2mHonY+AqF4ezrRAzobWWEBleUEh2i6jU/ffZZkw9fa8crG3NJ2ZYaaHuTrlIg60KBg9d8bOFsICNv/xFCHCs9PakE396CMpLRlWZ0sl+Pm2RLAwONWI0kzb6moCAMcxKVFQRWIBzaTUxzny35k4OR9qSgvVQu3/7/qq9jIeMDT4hvIhfxlkZANOUNsY9XCoRxWArLmFk64GCrCRixuQfdYvUPsBq8FaN8UXVwK5MATQqDSyTuxOtyw/U/u5lcy7XS9o42DtY8GfeTDJXoA9rCxLotcEYVPXs1sqoIG5/LJBIePNGgDRefuxoPY4kSqAJHFlI4llLZwAw3/fTy1WNt/IW0dyGpgpKEYbfVtwOgs/3YjVO5z7dWFIUGKAqkciW6bLqzeJKa5gir6gqcu2SytG2vN45wySpfRfrRBCAF8AGeTyK86AREEQDwo9fwbX90AX7+bwcgIuBjOuZVBIEFTIS3GaBrIFSKUlanfbC56BYHGKuJGo60tq9dNH5B4D6A5bebTExk5BHR5ggTQyACGNZzI3WSi9tuYAoXUY05TtkNpIB0NFsy+XJ1LImp6s96tgpYgdv6V7/mVY9jdcASJqQE4AB8xA94TifwmxaEv30pDMgQ+I2E8Nnn3vb6p0N5gxaMWCR05qBBAxAnyKFBshBCIixYDk+VB8QxBski9GpwVsIhBMto8p8Z5QsANkzVoGWuuHDbmP7qSmqIhh9rN403nwP8M3WnsbydG9bG3BnK5lbKZlENSZuSdgMoaK8nm4Ue36Y3IWnLkdGhgp/Yla6EZsLCbh5iAooA33ihC/C6BLxTREFASIQ/fn1+FYgCQMgYcItgWkApwNylEcRzDa4hbgRjxFeF2P8FemTwEei3hpI0S5UVGbQmFiyFwUmBNpiCJOaOxNzVHLHrft6/Ux4sPRtcWz9OVocpC0VWbTpeqrm4bYdF6/Xnj3TL8eiMzWF5bjxw8Hyh7Fpjt6IjqrpxcjtDvyQ3oOOOnYOk9wPK4rQZkrnIYCRAWoJn6SW9EvcTILJwI/7vwncLqgQowk9KCWSC6XITH6tBC+UgHQzeBF4A0QYVjNZTx1TyVMATwS2rXEkzTYk73nrBCOLF4lqeyPho4PJDveFcqEwRwEcNA39kw70UkDqVxfd63dGyMGxh/l75+b2PSQ1OcWzOKv7GkM6o6Dp3r4F3ghSLI+vZTfA1goSQCzK7Ovq+TnjLRsQytsbZwi5E54nDE9Rrae3/EPZHOMRDDIi3+LmPDjMHPKAEG17OimCaICI8p2aEMmYjQVjmGKxCEz83EXWWCVOOguxShqexgZEKvj+Cj/59Q/wlkKs2QP5sCePQAFptGDmDUg8V8N0N9CKhuW6CAzESbdCxeQ5N/feQ0sYcw2Bc1sDmEpK/JW2p5X2hXEsUE0eFxzEdIW9oWswX1Yf1ydQGYVKNjWNnLhlV49wy+og/MIVyADjT+2nl6tRdoEnN+NMqGWD0foegKIMlQ7DWgKw+INtNyf6T2hGGc4xpHZZopQKnMO8amd5y3yR7b4KaBS4okE7SnMvC1kNMDzlFTbX9ob7OuTRdkKOcs5vb/Oy+OuZeh9Q7sru09y4mUpzy+dLDMHEt66HueG/vY6syA6FkeX3MkB6s02d5B0ywdjPSk6niaR5J/qQNVc/LcRbbaOxuy0oYK/Dtel3RxVTpUe834jwkLGrs7IXFWY23LZ4cXntxRkDHaQtUdFdTq1yW9sltYVk1RiyneWYW5tdyYxFk2KpWemgsCnvV8+z6y1cj0sLe9tnZSVvlEgJjgJ2NATFE14ysNf75Y6XiQ5Fed9KqNLB4UMtrxIYmp7sWOX/r1kB1P2fW/qWhpsqHOK2caD5ZWZXz9+0d+xcnLMsLybx3Vtb2Uib6xb9HdfOVWz10vNFJUc/tzz4ZNzg+37uQcxN5HmlsbHVY1eoWOVLPPHe8pq59kFNxtJwWj3KwvHIgzr1o4Uz1JYtRDXrqlTkq4bzLoq91K23K1C9piyb1cqG01NcaxgZqbXTcOLWMKXyZJ1jUo0Ib//P240VpFyAoLAeAc7FPGy8/OA9JdwL8MPjy/0zQaSAiL1UGoijQU4eNESgNgR4diiJAT8F41GrMt9upj1efbdTe/rYzePbamvK0DdUyR9b4V0rQnR+pKN5WzrWbPYaM5iqSrYqu7PxIWX6UcNvk3qLa2naF163DHRTVwHxIuhsjRMFbtvqtACMpmc3x5dpY4crd14ujY2tfcdZf1djvSIWJSXYzqyJzT/0pw/lCLETmy7Ekc69nfsCGDJYFPcWFTmV07AeHoYVxX3Jj23XnZ++/v3314tu0rCWAVFXyoY7ttGH+vh4pS0pKsEijijA8+7QT/yaqaT+CwXNAQPtD62Y7mms++MooNexB5QgihraNpfEksaKhen+xSAf4Gm/Nt00BN8uudLm2queasjbF1S2XsirJgjWzzxv9LvxqzniCmB1HLoq4Zg92qquzTH/WQL0SD0q2kINYQ3GkpCJRRFSCe0TJIkjdhFxNkvuOnho65fil0xeYD5cvMtl9WNwrFOnMJiONxbholfKdM2VQvjnbatfp6BH/v1b0sqchDMN5yO9a1d+CovlqPNADxP1Hsd/OKHqe/YcLRqMfTOInwvTXarjjD//l1yj69kvvXUIbABIpd4CbqnDm2b8x9WGnkeSAiDy6qkjr3Lx/x+6PvF5X4ZwmjShp66TRu3x9qxI3l6SpvL7MOVYg0ukROJWc0dBjwpzl7apSJUVBmplpsb8wMx1ChVeeILDEjKAnRKY32JqOYyGaYq+NVZuA2X7SlhIla+osr9E1OeQ9KUrDIzck+iSLjSbpK7MJXC5xZxSfo7RpsecAm423/37AECHD0A0UdFNBQJ/CVgHkELfoPp7tmgC6HHmoVNQEAKxcIn+ps15fMeLQm9wph+kqy10o1xKrH5ItZvBYM/Gsi5n+hqaKUFqlS5EdszTQPs3/L9Irt4oa4bEgDxViqSnIE5ZeR6AipOhx/c3DzGdnb0pvbOo1l/3JcyVN58V28uHQ9mYfqdckeXM0A7m96bDiOqgACj7YooCgSIQYDnFshEJ6KtH9Kjy8qn/5hesRFNNQtm1CNplY7jw1QACdfJQS3EI2Rna6qYG9kw6NkdLd0gZFU/Vde3p2ROqrF9vncoiQbkzy13Om8cGoM3hwhc7mwQnj7o/2P+ffrHXF4RIzHkxmyHNhQlGd51v8ZF3I2qhWhhyfMREe0hsNR8dTwzYLEADAA2sGgZpsMOg3iEWwcWFz14OMOF4nF7TmGyjROd2WyRq0ROoQKJgx4eOwhM5EeT8UGkqRoC05nHBYThVxw256cozLl4xJ6/W8R+1zue/KEY8udwHPNvXKyYMwNRg47A1dQnjio5GsHNcn497ItE0k58OEvNccsi8GQAhRo5KNAESACjaAgTl3CxI2I4ksuEKS+v02oRGFLSNBzCZ5VGmOQKuChgyY8Bvnu2rmrmgQUn7un9pNixbcHS4MteA1I8UEG4K7SPPZNLTOrtaRvRweHLWu6KyOJHfSIWWmQHoUToA5RMQnNatEBIBAxICND7eWeLA3+/DsEhiTrIbCgeukPuaISfGhUoAVpk9oXCjXeytHie5oFWngLiUlIlRPmpXbHo0Yjs3zYLgonfFi1Z+a4lP3WABQ8L5qKMLfAQy07byND7MT5NBzK/NXFdRTg5D81VoSamdYvY9EMsWcI1PC+qZTVucH83O+6ZO7i+PStsQKHGE2roG9MqFlgxtgARFRnjVGBA4Cs/P4B3xEflT29aZdRFfNPAjX7iXIWeMpFT72DX7+z/r885vJ7b985k0SvPceiapg5ceHkEIRdhNB6DLbBKOwk1HI8RTDnDl/31Ym/8C9B2JX8toEVYIq5r0XdhhDmOd8pxFdola0C17GVbAIoZsoHAM/bXnGOe6lgU565Jj33rPTagtKIvZDCsMkd4EvtB11OeXVk3s3wWPg+yC0E+nZ/btFj8S6tqf6HLL8arySyY92gSogH5XY5etwvZZ0zB45lN3sL3xRd+BbiLeGCo+/ApXqvD4tzOTETvCkeKFGjDvqD68bjs5DQcQ9YF2Bv0Abkl5isXwKgcuSEHnRhd0geVKSlt8X8zqYH6Wpq/PC/tuk50npAPIDyMi/zPqrR6ryiQBJ2evZYT9Jc8e5N0T3NvQj6e6jcUdO9/mCoOuCP0GG/qGN+s+08ncCAsaTTpHY/cSU4Cgnbmpxd35aWyCKbeKY3XcsrcdL897//xVtwd9AISNiw3Op0sJ0NYFPbblEdj7DDTChJs+Xmn2eM2pnwkvfaq15dtUPVvFq2a1Ht9WAtBrqPfwbJ78mq50rpLoPQT96VBYI0lfrsywNUtbIIOob3QAqKIz0tklDluKrNErzHkUTCoe0eSTdsa+Wgk4HA+4sFn4CYQmMU7jToiRl6Ee8/uSlan2WPxYyl5fR4WYi0Z5xn37Q3X2IG733YWn7tHoi3VcqzL1eoXZhrTrcj4uwoUFQTQnPtBdbkYxhar2eJH8l/CxPykaQGuqCe418oQfMe2+SHFJIsCZa1IYqoophHaOfqbyokO8ico1Zj5vFq+J4cVVeX4rW5pbjPpvBQxnvCvNX5bdcLtxUj8R8nKeaTPF+YoXxFNPUATsks0w2qN/CiOYQzchOHF1Ymufk151b3eya0MGF9BIgusSfTTqkH17JjQbw8Zlx8Mubt6X4AHUypYlNqoNnWWP7VpUoC5/NxumCcNekrO8De9P8KwD13vOqjBZZitdEVeFTNimRss6ctFouyGcoXP4r4aPEc4Xkn58jXK6MKmQQfp+PywYARVhJRroAAABFeGlmAABJSSoACAAAAAYAEgEDAAEAAAABAAAAGgEFAAEAAABWAAAAGwEFAAEAAABeAAAAKAEDAAEAAAACAAAAEwIDAAEAAAABAAAAaYcEAAEAAABmAAAAAAAAAC8ZAQDoAwAALxkBAOgDAAAGAACQBwAEAAAAMDIxMAGRBwAEAAAAAQIDAACgBwAEAAAAMDEwMAGgAwABAAAA//8AAAKgBAABAAAAZAAAAAOgBAABAAAAZAAAAAAAAAA=",  // Embedded logo (circle badge from knoxexteriorcare.com)
+  formspreeEndpoint: "https://formspree.io/f/mqegklbb",
+};
+
+// ════════════════════════════════════════════════════════════════
+// ✏️  PRICING — Update numbers here when rates change.
+//     Comments show the unit of measure for each service.
+//     Nothing else needs to change when you update prices.
+// ════════════════════════════════════════════════════════════════
+const PRICES = {
+
+  // LAWN CARE — priced by lot acreage tier
+  // onetime = per-visit [lo, hi] | recurring = flat $/month
+  lawn: {
+    onetime:  { small:[35,55],  medium:[45,75],  large:[65,115], xlarge:[100,175], jumbo:[150,275] },
+    weekly:   { small:133,      medium:171,       large:248,      xlarge:381,       jumbo:572 },
+    biweekly: { small:68,       medium:88,        large:127,      xlarge:195,       jumbo:293 },
+    monthly:  { small:32,       medium:41,        large:60,       xlarge:92,        jumbo:138 },
+  },
+
+  // WINDOW CLEANING — priced per pane, by floor level
+  // paneBands = approximate pane count mapped to each display option
+  windows: {
+    paneBands:    { lt10:8,  to20:15, to35:27, gt35:45 },
+    otPerPane:    { f1:[5,6], f2:[7,9], f3:[10,13] },  // [lo, hi] per pane by floor
+    subPerPaneMo: 2.80,                                 // $/pane/month (monthly sub base)
+    storyMult:    { '1':1.0, '2':1.30, '3':1.65 },     // story-level premium multiplier
+    qtrMult:      0.28,   // quarterly expressed as $/month (≈28% of monthly rate)
+    minOT:        75,
+    minSubMo:     12,
+  },
+
+  // GUTTER CLEANING — priced per linear foot
+  // lfBands = representative LF midpoint used in calculation
+  gutters: {
+    lfBands:    { lt100:80, to150:125, to200:175, gt200:230 },
+    perLF:      [1.20, 2.00],   // [lo, hi] per linear foot
+    story2Mult: 1.30,           // +30% for 2-story access
+    minOT:      { '1story':120, '2story':165 },
+    subFreqDiv: { quarterly:3, annual:12 },  // OT price ÷ this = $/month equiv
+  },
+
+  // PRESSURE WASHING — priced by property size band (house and/or flatwork)
+  pressureWash: {
+    house:    { small:[150,300], medium:[225,450], large:[325,650], xlarge:[475,950], jumbo:[625,1300] },
+    flatwork: { small:[75,150],  medium:[100,225], large:[140,300], xlarge:[190,400], jumbo:[250,550]  },
+    // 'both' = house + flatwork summed in calcPrice()
+  },
+
+  // ROOF CLEANING — priced per sqft with material multiplier
+  // sqftBands = representative roof sqft midpoint per selection
+  roofClean: {
+    sqftBands:   { small:1200, medium:2000, large:3000, xlarge:4200, jumbo:6000 },
+    ratePerSqFt: [0.18, 0.28],
+    matMult:     { asphalt:1.0, metal:0.85, tile:1.15 },
+    minPrice:    275,
+  },
+
+  // DRYER VENT CLEANING — flat rate by vent exit location
+  dryerVent: {
+    ground: [120, 120],
+    story2: [145, 145],
+    roof:   [175, 175],
+    subMo:  { ground:10.00, story2:12.08, roof:14.58 },  // annual cost ÷ 12
+  },
+
+  // PET WASTE REMOVAL — priced per visit by dog count
+  // otVisit = single visit [lo, hi] | sub = flat $/month by frequency
+  petWaste: {
+    otVisit:    { d1:[50,75],  d2:[70,100], d3:[70,100] },
+    subWeekly:  { d1:57.16,   d2:94.51,    d3:128.70 },
+    subBi:      { d1:29.95,   d2:49.50,    d3:67.50  },
+    subMonthly: { d1:14.25,   d2:23.54,    d3:32.13  },
+  },
+
+  // SOLAR PANEL CLEANING — priced per panel
+  // panelBands = approximate panel count per selection
+  solarPanels: {
+    panelBands: { lt10:8, to20:15, to30:24, gt30:40 },
+    perPanel:   [8, 12],  // [lo, hi] per panel
+    story2Add:  30,       // flat surcharge for 2nd-story roof access
+    minPrice:   75,
+  },
+
+  // GRAFFITI REMOVAL — priced by affected area + mobilization fee
+  graffiti: {
+    mobFee: 50,
+    small:  [100, 200],  // under 10 sqft
+    medium: [200, 350],  // 10–30 sqft
+    large:  [350, 600],  // 30+ sqft
+  },
+
+  // DRIVEWAY SEALING — priced by driveway size band
+  drivewaySeal: {
+    small:  [150, 250],  // 1-car, ~300 sqft
+    medium: [200, 350],  // 2-car, ~500 sqft
+    large:  [300, 500],  // long/wide, ~750 sqft
+    xlarge: [450, 700],  // estate/commercial, 1,000+ sqft
+  },
+
+  // HANDYMAN / EXTERIOR TUNE-UP — hourly at flat rate
+  handyman: {
+    rate:    55,          // $/hr
+    hrBands: { h1:[1,1], h2:[2,2], h3:[3,4], h4:[4,8] },
+  },
+
+  // SNOW & ICE REMOVAL — priced per event by property/driveway size
+  snowIce: {
+    small:  [50,  85],
+    medium: [75,  115],
+    large:  [85,  140],
+    xlarge: [100, 175],
+  },
+
+  // EXTERIOR PAINT TOUCH-UP — flat rate by scope
+  paintTouchup: {
+    minor:     [125, 175],
+    moderate:  [200, 300],
+    frontDoor: [150, 225],
+  },
+
+  // EXTERIOR / HOUSE WASH SUBSCRIPTION — priced per sqft expressed as $/month
+  // sqftBands = representative home sqft per selection
+  houseWash: {
+    sqftBands:   { small:1200, medium:1800, large:2500, xlarge:3500, jumbo:5000 },
+    ratePerSqFt: [0.05, 0.08],
+    minMo:       15,
+    freqDiv:     { quarterly:3, annual:12 },
+  },
+
+  // BIN CLEANING SUBSCRIPTION — priced per bin per month
+  binClean: {
+    perBinMo: { monthly:13.80, quarterly:4.71 },
+    binBands: { b1:1, b2:2, b3:3 },
+  },
+
+  // PARKING LOT SWEEPING SUBSCRIPTION — commercial only, by lot size + frequency
+  parkingLot: {
+    weekly:   { small:80, medium:110, large:150, xlarge:200, jumbo:280 },
+    biweekly: { small:50, medium:70,  large:95,  xlarge:130, jumbo:175 },
+    monthly:  { small:30, medium:40,  large:55,  xlarge:75,  jumbo:100 },
+  },
+};
+
+// ════════════════════════════════════════════════════════════════
+// SERVICE ICONS — minimalistic SVG illustrations (24×24, stroke-based)
+// ════════════════════════════════════════════════════════════════
+const SVG_ATTRS = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+const ICONS = {
+  lawn:       `<svg ${SVG_ATTRS}><path d="M12 22v-9"/><path d="M12 13c-2-4-6-5-8-4 1 3 4 5 8 4"/><path d="M12 13c2-4 6-5 8-4-1 3-4 5-8 4"/><path d="M4 22h16"/></svg>`,
+  windows:    `<svg ${SVG_ATTRS}><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>`,
+  gutters:    `<svg ${SVG_ATTRS}><path d="M2 6h20v3a5 5 0 01-5 5H7A5 5 0 012 9V6z"/><path d="M7 14v4m5-4v6m5-4v4"/></svg>`,
+  pressure:   `<svg ${SVG_ATTRS}><path d="M3 20l6-6"/><path d="M9 14l4-4"/><circle cx="15" cy="8" r="2"/><path d="M17 6l3-3"/><path d="M18 8h3"/><path d="M17 10l3 3"/></svg>`,
+  roof:       `<svg ${SVG_ATTRS}><path d="M2 11L12 2l10 9"/><path d="M5 9v11a1 1 0 001 1h12a1 1 0 001-1V9"/><path d="M10 21v-5h4v5"/></svg>`,
+  dryervent:  `<svg ${SVG_ATTRS}><rect x="3" y="6" width="13" height="12" rx="1"/><line x1="3" y1="10" x2="16" y2="10"/><line x1="3" y1="14" x2="16" y2="14"/><path d="M16 8.5l3.5-1.5M16 12h4M16 15.5l3.5 1.5"/></svg>`,
+  petwaste:   `<svg ${SVG_ATTRS}><ellipse cx="12" cy="16.5" rx="5" ry="3.5"/><circle cx="7.5" cy="11" r="1.5"/><circle cx="16.5" cy="11" r="1.5"/><circle cx="10" cy="8" r="1.5"/><circle cx="14" cy="8" r="1.5"/></svg>`,
+  solar:      `<svg ${SVG_ATTRS}><rect x="2" y="10" width="20" height="11" rx="1"/><line x1="2" y1="15.5" x2="22" y2="15.5"/><line x1="9" y1="10" x2="9" y2="21"/><line x1="16" y1="10" x2="16" y2="21"/><circle cx="18" cy="5" r="2"/><path d="M18 2V1M21 3l.7-.7M22 5h1M21 7l.7.7M18 8v1M15 7l-.7.7M14 5h-1M15 3l-.7-.7"/></svg>`,
+  graffiti:   `<svg ${SVG_ATTRS}><rect x="8" y="7" width="7" height="13" rx="2"/><path d="M10 7V5h3v2"/><path d="M15 9.5l2-1.5"/><path d="M15.5 7.5l1.5-2"/><circle cx="19" cy="7.5" r="0.9" fill="currentColor" stroke="none"/><circle cx="20" cy="10.5" r="0.9" fill="currentColor" stroke="none"/><circle cx="19" cy="13.5" r="0.9" fill="currentColor" stroke="none"/></svg>`,
+  driveseal:  `<svg ${SVG_ATTRS}><path d="M6 20L9 4M15 4l3 16"/><path d="M6 20h12"/><path d="M10 12h4M9.5 16h5"/></svg>`,
+  handyman:   `<svg ${SVG_ATTRS}><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3-3a1 1 0 000-1.4l-1.6-1.6a1 1 0 00-1.4 0l-3 3z"/><path d="M5 21l9.4-9.4"/></svg>`,
+  snowice:    `<svg ${SVG_ATTRS}><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/></svg>`,
+  paint:      `<svg ${SVG_ATTRS}><path d="M18 4a3 3 0 010 5H5V4h13z"/><path d="M5 9v10a1 1 0 001 1h6a1 1 0 001-1v-4"/><path d="M17 17c0 2-2 4-2 4s-2-2-2-4 2-2 2-2 2 0 2 2z"/></svg>`,
+  housewash:  `<svg ${SVG_ATTRS}><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V10.5z"/><path d="M9 21v-6h6v6"/><path d="M5 16c1.5-1 3-.5 4.5 0M14.5 16c1.5-1 3-.5 4.5 0"/></svg>`,
+  binclean:   `<svg ${SVG_ATTRS}><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>`,
+  parkinglot: `<svg ${SVG_ATTRS}><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V8h5a3 3 0 010 6H9"/></svg>`,
+  _other:     `<svg ${SVG_ATTRS}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/></svg>`,
+};
+
+// ════════════════════════════════════════════════════════════════
+// SERVICE CATALOG
+// supOT = available as one-time | supSub = available as subscription
+// res = residential only | comm = commercial only
+// desc = short description shown in Step 3 before questions
+// ════════════════════════════════════════════════════════════════
+const SERVICES = [
+  { id:'lawn',       name:'Lawn Care',               supOT:true,  supSub:true,
+    desc:'Mowing, edging, string trimming, and blowdown. Priced by lot acreage.' },
+  { id:'windows',    name:'Window Cleaning',         supOT:true,  supSub:true,
+    desc:'Streak-free interior & exterior window cleaning. Priced per pane by floor level.' },
+  { id:'gutters',    name:'Gutter Cleaning',         supOT:true,  supSub:true,
+    desc:'Debris removal, flush, and flow check. Priced by linear feet of gutter.' },
+  { id:'pressure',   name:'Pressure Washing',        supOT:true,  supSub:false,
+    desc:'House soft wash and/or flatwork (driveway, patio, walkways). Priced by surface square footage.' },
+  { id:'roof',       name:'Roof Cleaning',           supOT:true,  supSub:false,
+    desc:'Soft-wash treatment to eliminate algae, moss, and staining. Priced by roof square footage.' },
+  { id:'dryervent',  name:'Dryer Vent Cleaning',     supOT:true,  supSub:true,  res:true,
+    desc:'Full vent line clearing to restore airflow and reduce fire risk. Flat rate by vent exit location.' },
+  { id:'petwaste',   name:'Pet Waste Cleanup',       supOT:true,  supSub:true,  res:true,
+    desc:'Full yard pickup and disposal. Priced per visit by number of dogs.' },
+  { id:'solar',      name:'Solar Panel Cleaning',    supOT:true,  supSub:false,
+    desc:'Deionized water wash to restore panel efficiency. Priced per panel.' },
+  { id:'graffiti',   name:'Graffiti Removal',        supOT:true,  supSub:false,
+    desc:'Chemical and pressure treatment to remove paint from exterior surfaces. Priced by affected area.' },
+  { id:'driveseal',  name:'Driveway Sealing',        supOT:true,  supSub:false,
+    desc:'Seal coat application to protect and restore asphalt or concrete. Priced by driveway size.' },
+  { id:'handyman',   name:'Handyman / Tune-Up',      supOT:true,  supSub:false,
+    desc:'Exterior repairs and touch-up tasks — caulking, gutter reattachment, door adjustments, and more. Billed hourly.' },
+  { id:'snowice',    name:'Snow & Ice Removal',      supOT:true,  supSub:false, res:true,
+    desc:'Per-event driveway clearing, walkway shoveling, and salt application. Priced by property size.' },
+  { id:'paint',      name:'Paint Touch-Up',          supOT:true,  supSub:false, res:true,
+    desc:'Spot repairs and touch-ups on exterior trim, siding, or doors. Flat rate by scope of work.' },
+  { id:'housewash',  name:'Exterior / House Wash',   supOT:false, supSub:true,
+    desc:'Recurring soft-wash subscription to keep your home\'s exterior clean year-round. Priced per square foot of exterior surface.' },
+  { id:'binclean',   name:'Bin Cleaning',            supOT:false, supSub:true,
+    desc:'Pressure wash and deodorize trash and recycling bins. Priced per bin per service.' },
+  { id:'parkinglot', name:'Parking Lot Sweeping',    supOT:false, supSub:true,  comm:true,
+    desc:'Regular mechanical sweeping to keep your lot clean and compliant. Priced by lot size and frequency.' },
+];
+
+// ════════════════════════════════════════════════════════════════
+// QUESTIONS CONFIG — keyed by "serviceId_mode"
+// Each question: { id, label, hint?, cols?, options:[{v, l, d?}] }
+// Answers stored in S.answers[id]. Continue enabled when all answered.
+// ════════════════════════════════════════════════════════════════
+const LOT_OPTS = [
+  { v:'small',  l:'Small',       d:'Under ¼ acre' },
+  { v:'medium', l:'Medium',      d:'¼ – ½ acre'   },
+  { v:'large',  l:'Large',       d:'½ – 1 acre'   },
+  { v:'xlarge', l:'Extra Large', d:'1 – 2 acres'  },
+  { v:'jumbo',  l:'Jumbo',       d:'2+ acres'     },
+];
+
+const QUESTIONS = {
+
+  // ── Lawn Care ──────────────────────────────────────────────
+  lawn_onetime: [
+    { id:'lotSize', label:'Lot / Property Size',
+      hint:'Lawn care is priced by lot acreage — mowing, edging, trimming, and blowing time all scale with lot size.',
+      options: LOT_OPTS },
+  ],
+  lawn_sub: [
+    { id:'lotSize', label:'Lot / Property Size',
+      hint:'Lawn care is priced by lot acreage.',
+      options: LOT_OPTS },
+    { id:'freq', label:'How often?', options:[
+      { v:'weekly',   l:'Weekly',   d:'Most thorough coverage' },
+      { v:'biweekly', l:'Bi-Weekly',d:'Most popular' },
+      { v:'monthly',  l:'Monthly',  d:'Once a month' },
+    ]},
+  ],
+
+  // ── Window Cleaning ────────────────────────────────────────
+  windows_onetime: [
+    { id:'windowBand', label:'Approx. how many windows?',
+      hint:'Count windows visible from outside, including glass doors. When in doubt, estimate low — your specialist will confirm.',
+      options:[
+        { v:'lt10', l:'Under 10',  d:'Smaller home' },
+        { v:'to20', l:'10 – 20',   d:'Average home' },
+        { v:'to35', l:'20 – 35',   d:'Larger home'  },
+        { v:'gt35', l:'35+',       d:'Large / multi-story' },
+      ]},
+    { id:'stories', label:'How many stories?', cols:3, options:[
+      { v:'1', l:'1 Story' },
+      { v:'2', l:'2 Stories' },
+      { v:'3', l:'3+ Stories' },
+    ]},
+  ],
+  windows_sub: [
+    { id:'windowBand', label:'Approx. how many windows?',
+      hint:'Count windows visible from outside.',
+      options:[
+        { v:'lt10', l:'Under 10' },
+        { v:'to20', l:'10 – 20'  },
+        { v:'to35', l:'20 – 35'  },
+        { v:'gt35', l:'35+'      },
+      ]},
+    { id:'stories', label:'How many stories?', cols:3, options:[
+      { v:'1', l:'1 Story' },
+      { v:'2', l:'2 Stories' },
+      { v:'3', l:'3+ Stories' },
+    ]},
+    { id:'freq', label:'How often?', options:[
+      { v:'monthly',   l:'Monthly',   d:'Always crystal clear' },
+      { v:'quarterly', l:'Quarterly', d:'Every 3 months' },
+    ]},
+  ],
+
+  // ── Gutter Cleaning ────────────────────────────────────────
+  gutters_onetime: [
+    { id:'lfBand', label:'Approx. linear feet of gutters?',
+      hint:'Measure the total run of gutter along your roofline. Typical single-story home: 100–150 LF. Two-story: 150–200+ LF.',
+      options:[
+        { v:'lt100', l:'Under 100 LF', d:'Small home / partial gutters' },
+        { v:'to150', l:'100 – 150 LF', d:'Typical single-story' },
+        { v:'to200', l:'150 – 200 LF', d:'Larger home or 2-story' },
+        { v:'gt200', l:'200+ LF',      d:'Large home or commercial' },
+      ]},
+    { id:'stories', label:'How many stories?', options:[
+      { v:'1story', l:'1 Story',   d:'Standard access' },
+      { v:'2story', l:'2 Stories', d:'+30% access surcharge' },
+    ]},
+  ],
+  gutters_sub: [
+    { id:'lfBand', label:'Approx. linear feet of gutters?',
+      hint:'Typical home: 100–200 LF total. A good guess is fine.',
+      options:[
+        { v:'lt100', l:'Under 100 LF' },
+        { v:'to150', l:'100 – 150 LF' },
+        { v:'to200', l:'150 – 200 LF' },
+        { v:'gt200', l:'200+ LF'      },
+      ]},
+    { id:'freq', label:'How often?', options:[
+      { v:'quarterly', l:'Quarterly', d:'Every 3 months — recommended' },
+      { v:'annual',    l:'Annually',  d:'Once a year' },
+    ]},
+  ],
+
+  // ── Pressure Washing ───────────────────────────────────────
+  pressure_onetime: [
+    { id:'scope', label:'What needs washing?', cols:3, options:[
+      { v:'house',    l:'House / Building', d:'Soft wash exterior' },
+      { v:'flatwork', l:'Driveway & Patio', d:'Concrete & pavers' },
+      { v:'both',     l:'Both',             d:'Best value' },
+    ]},
+    { id:'size', label:'Approx. surface area to be washed?',
+      hint:'For house: estimate total exterior wall area. For flatwork: estimate concrete/paver sq footage. Choose the closest range — your specialist will confirm.',
+      options:[
+        { v:'small',  l:'Under 1,000 sqft',   d:'Small home or minimal flatwork' },
+        { v:'medium', l:'1,000 – 2,000 sqft', d:'Average home or driveway' },
+        { v:'large',  l:'2,000 – 3,500 sqft', d:'Larger home or full property' },
+        { v:'xlarge', l:'3,500 – 5,500 sqft', d:'Large home + flatwork' },
+        { v:'jumbo',  l:'5,500+ sqft',         d:'Estate or commercial' },
+      ]},
+  ],
+
+  // ── Roof Cleaning ──────────────────────────────────────────
+  roof_onetime: [
+    { id:'roofSize', label:'Approx. roof square footage?',
+      hint:"Not sure? Use your home's heated square footage as a rough guide — roof sqft is typically similar.",
+      options:[
+        { v:'small',  l:'Under 1,500 sqft' },
+        { v:'medium', l:'1,500 – 2,500'    },
+        { v:'large',  l:'2,500 – 3,500'    },
+        { v:'xlarge', l:'3,500 – 5,000'    },
+        { v:'jumbo',  l:'5,000+ sqft'      },
+      ]},
+    { id:'material', label:'Roof Material', cols:3, options:[
+      { v:'asphalt', l:'Asphalt Shingles', d:'Most common' },
+      { v:'metal',   l:'Metal Roof' },
+      { v:'tile',    l:'Tile Roof' },
+    ]},
+  ],
+
+  // ── Dryer Vent Cleaning ────────────────────────────────────
+  dryervent_onetime: [
+    { id:'exitLoc', label:'Where does the dryer vent exit the home?',
+      hint:'Exit location determines access difficulty and is the main pricing factor.',
+      options:[
+        { v:'ground', l:'Ground / Siding', d:'$120 flat' },
+        { v:'story2', l:'2nd-Story Wall',  d:'$145 flat' },
+        { v:'roof',   l:'Through the Roof',d:'$175 flat' },
+      ]},
+  ],
+  dryervent_sub: [
+    { id:'exitLoc', label:'Where does the dryer vent exit the home?',
+      hint:'Annual cleaning — billed monthly.',
+      options:[
+        { v:'ground', l:'Ground / Siding' },
+        { v:'story2', l:'2nd-Story Wall'  },
+        { v:'roof',   l:'Through the Roof'},
+      ]},
+  ],
+
+  // ── Pet Waste Cleanup ──────────────────────────────────────
+  petwaste_onetime: [
+    { id:'dogs', label:'How many dogs?',
+      hint:'Pricing is per visit and covers the full yard.',
+      options:[
+        { v:'d1', l:'1 Dog',   d:'$50 – $75 / visit' },
+        { v:'d2', l:'2 Dogs',  d:'$70 – $100 / visit' },
+        { v:'d3', l:'3+ Dogs', d:'$70 – $100 / visit' },
+      ]},
+  ],
+  petwaste_sub: [
+    { id:'dogs', label:'How many dogs?', options:[
+      { v:'d1', l:'1 Dog'   },
+      { v:'d2', l:'2 Dogs'  },
+      { v:'d3', l:'3+ Dogs' },
+    ]},
+    { id:'freq', label:'How often?', cols:3, options:[
+      { v:'weekly',   l:'Weekly',   d:'Most popular' },
+      { v:'biweekly', l:'Bi-Weekly' },
+      { v:'monthly',  l:'Monthly'  },
+    ]},
+  ],
+
+  // ── Solar Panel Cleaning ───────────────────────────────────
+  solar_onetime: [
+    { id:'panelBand', label:'Approx. how many solar panels?',
+      hint:'Priced per panel. Count your panels or check your system documentation.',
+      options:[
+        { v:'lt10', l:'Under 10 panels' },
+        { v:'to20', l:'10 – 20 panels'  },
+        { v:'to30', l:'20 – 30 panels'  },
+        { v:'gt30', l:'30+ panels'      },
+      ]},
+    { id:'roofAccess', label:'Roof access level?', options:[
+      { v:'1story', l:'1-Story Roof',  d:'Standard pricing' },
+      { v:'2story', l:'2-Story Roof',  d:'+$30 access surcharge' },
+    ]},
+  ],
+
+  // ── Graffiti Removal ───────────────────────────────────────
+  graffiti_onetime: [
+    { id:'areaSize', label:'Approximate affected area?',
+      hint:'Includes a $50 mobilization fee. Price depends on surface type and paint depth — range may widen.',
+      options:[
+        { v:'small',  l:'Small',  d:'Under 10 sqft' },
+        { v:'medium', l:'Medium', d:'10 – 30 sqft'  },
+        { v:'large',  l:'Large',  d:'30+ sqft'       },
+      ]},
+  ],
+
+  // ── Driveway Sealing ───────────────────────────────────────
+  driveseal_onetime: [
+    { id:'driveSize', label:'Driveway size?',
+      hint:'Seal coat + edge work. Optional crack filling adds $50–$150.',
+      options:[
+        { v:'small',  l:'1-Car Driveway',       d:'~300 sqft' },
+        { v:'medium', l:'2-Car Driveway',        d:'~500 sqft' },
+        { v:'large',  l:'Long / Wide Driveway',  d:'~750 sqft' },
+        { v:'xlarge', l:'Large / Estate Drive',  d:'1,000+ sqft' },
+      ]},
+  ],
+
+  // ── Handyman / Tune-Up ─────────────────────────────────────
+  handyman_onetime: [
+    { id:'hours', label:'Estimated time needed?',
+      hint:'$55/hr · 1-hour minimum. Common jobs: gutter reattachment, caulking, light fixture swap, door adjustments.',
+      options:[
+        { v:'h1', l:'~1 Hour',    d:'Quick fix' },
+        { v:'h2', l:'~2 Hours',   d:'Small project' },
+        { v:'h3', l:'3 – 4 Hours',d:'Medium project' },
+        { v:'h4', l:'4+ Hours',   d:'Larger scope' },
+      ]},
+  ],
+
+  // ── Snow & Ice Removal ─────────────────────────────────────
+  snowice_onetime: [
+    { id:'size', label:'Property / driveway size?',
+      hint:'Per-event pricing includes driveway, front walkways, and salt application.',
+      options:[
+        { v:'small',  l:'Small',       d:'1-car drive + short walk' },
+        { v:'medium', l:'Medium',      d:'2-car drive + walks' },
+        { v:'large',  l:'Large',       d:'Long driveway + walks' },
+        { v:'xlarge', l:'Extra Large', d:'Estate or wide drives' },
+      ]},
+  ],
+
+  // ── Exterior Paint Touch-Up ────────────────────────────────
+  paint_onetime: [
+    { id:'scope', label:'Scope of work?', cols:3, options:[
+      { v:'minor',     l:'Minor Touch-Up',  d:'Small spots, 1–2 hrs' },
+      { v:'moderate',  l:'Moderate',        d:'Larger areas, 2–4 hrs' },
+      { v:'frontDoor', l:'Full Front Door', d:'Complete repaint' },
+    ]},
+  ],
+
+  // ── Exterior / House Wash (sub) ────────────────────────────
+  housewash_sub: [
+    { id:'homeSize', label:'Approx. home / structure size?',
+      hint:"Soft wash subscription priced per square foot of exterior surface. Use your home's heated sqft as a guide.",
+      options:[
+        { v:'small',  l:'Under 1,500 sqft' },
+        { v:'medium', l:'1,500 – 2,200'    },
+        { v:'large',  l:'2,200 – 3,000'    },
+        { v:'xlarge', l:'3,000 – 4,500'    },
+        { v:'jumbo',  l:'4,500+ sqft'      },
+      ]},
+    { id:'freq', label:'How often?', options:[
+      { v:'quarterly', l:'Quarterly', d:'Every 3 months' },
+      { v:'annual',    l:'Annually',  d:'Once a year' },
+    ]},
+  ],
+
+  // ── Bin Cleaning (sub) ─────────────────────────────────────
+  binclean_sub: [
+    { id:'bins', label:'How many bins?', cols:3, options:[
+      { v:'b1', l:'1 Bin' },
+      { v:'b2', l:'2 Bins' },
+      { v:'b3', l:'3+ Bins' },
+    ]},
+    { id:'freq', label:'How often?', options:[
+      { v:'monthly',   l:'Monthly',   d:'Always fresh' },
+      { v:'quarterly', l:'Quarterly', d:'Every 3 months' },
+    ]},
+  ],
+
+  // ── Parking Lot Sweeping (sub, commercial) ─────────────────
+  parkinglot_sub: [
+    { id:'lotSize', label:'Lot Size', options: LOT_OPTS },
+    { id:'freq', label:'How often?', cols:3, options:[
+      { v:'weekly',   l:'Weekly'   },
+      { v:'biweekly', l:'Bi-Weekly'},
+      { v:'monthly',  l:'Monthly'  },
+    ]},
+  ],
+};
+
+// ════════════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════════════
+const S = {
+  propType:    null,   // 'residential' | 'commercial'
+  mode:        null,   // 'onetime' | 'sub'
+  svcId:       null,   // selected service id, or '_other'
+  answers:     {},     // { questionId: value }
+  isCustom:    false,
+  customText:  '',
+  isBundle:       false,
+  bundleWhich:    null,   // 'tcep' | 'tpc'
+  bundleServices: [],     // selected service ids for tcep
+  quoteType:      null,   // 'psr' | 'instant'
+  prevStep:       's3',
+};
+
+// ════════════════════════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════════════════════════
+const fmt  = n       => '$' + Math.round(n).toLocaleString('en-US');
+const fmtR = (lo,hi) => lo === hi ? fmt(lo) : fmt(lo) + ' – ' + fmt(hi);
+
+// ════════════════════════════════════════════════════════════════
+// STEP 1 — PROPERTY & GOAL
+// ════════════════════════════════════════════════════════════════
+function pick(key, val, el) {
+  el.closest('.opt-grid').querySelectorAll('.opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  S[key] = val;
+  document.getElementById('next1').disabled = !(S.propType && S.mode);
+}
+
+// ════════════════════════════════════════════════════════════════
+// BUNDLE INQUIRY — skip steps 2 & 3, go straight to contact
+// ════════════════════════════════════════════════════════════════
+function goBundle(which) {
+  S.isBundle    = true;
+  S.bundleWhich = which;
+  if (which === 'tcep') {
+    S.prevStep = 'sBundleSvc';
+    buildBundleServiceGrid();
+    goTo('sBundleSvc');
+  } else {
+    S.prevStep = 's1';
+    goTo('s4');
+  }
+}
+
+function buildBundleServiceGrid() {
+  const grid = document.getElementById('bundleSvcGrid');
+  grid.innerHTML = '';
+  S.bundleServices = {};   // { id: freq }
+  document.getElementById('nextBundle').disabled = true;
+
+  const isRes = S.propType === 'residential';
+  (isRes ? RES_SERVICES : COM_SERVICES).forEach(svc => {
+    const card = document.createElement('div');
+    card.className  = 'svc-card';
+    card.dataset.id = svc.id;
+    card.innerHTML  = `
+      <div class="sc-icon">${ICONS[svc.id] || ''}</div>
+      <div class="sc-name">${svc.name}</div>
+      <div class="freq-picker" id="fp-${svc.id}" style="display:none">
+        <button class="freq-btn" onclick="pickFreq('${svc.id}','Weekly',event)">Weekly</button>
+        <button class="freq-btn" onclick="pickFreq('${svc.id}','Biweekly',event)">Biweekly</button>
+        <button class="freq-btn" onclick="pickFreq('${svc.id}','Monthly',event)">Monthly</button>
+      </div>`;
+    card.onclick = (e) => { if (!e.target.classList.contains('freq-btn')) selectBundleSvc(svc.id, card); };
+    grid.appendChild(card);
+  });
+}
+
+function selectBundleSvc(id, card) {
+  const alreadySelected = S.bundleServices.hasOwnProperty(id);
+  if (alreadySelected) {
+    // deselect: remove freq, hide picker, remove sel classes
+    delete S.bundleServices[id];
+    card.classList.remove('sel', 'sel-partial');
+    const fp = document.getElementById('fp-' + id);
+    if (fp) { fp.style.display = 'none'; fp.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('sel')); }
+  } else {
+    // select: show freq picker, mark partial until freq chosen
+    S.bundleServices[id] = null;
+    card.classList.add('sel-partial');
+    const fp = document.getElementById('fp-' + id);
+    if (fp) fp.style.display = 'flex';
+  }
+  checkBundleReady();
+}
+
+function pickFreq(id, freq, e) {
+  e.stopPropagation();
+  S.bundleServices[id] = freq;
+  const card = document.querySelector(`.svc-card[data-id="${id}"]`);
+  if (card) { card.classList.remove('sel-partial'); card.classList.add('sel'); }
+  const fp = document.getElementById('fp-' + id);
+  if (fp) fp.querySelectorAll('.freq-btn').forEach(b => { b.classList.toggle('sel', b.textContent === freq); });
+  checkBundleReady();
+}
+
+function checkBundleReady() {
+  const ids = Object.keys(S.bundleServices);
+  const allHaveFreq = ids.every(id => S.bundleServices[id] !== null);
+  document.getElementById('nextBundle').disabled = !(ids.length >= 2 && allHaveFreq);
+}
+
+// ════════════════════════════════════════════════════════════════
+// STEP 2 — BUILD SERVICE GRID
+// ════════════════════════════════════════════════════════════════
+function buildServiceGrid() {
+  const grid = document.getElementById('svcGrid');
+  grid.innerHTML = '';
+  S.svcId   = null;
+  S.isCustom = false;
+  document.getElementById('next2').disabled = true;
+
+  const isRes = S.propType === 'residential';
+  const isOT  = S.mode === 'onetime';
+  document.getElementById('s2Sub').textContent = isOT
+    ? 'Select the one-time service you need.'
+    : 'Select the service you want on autopilot.';
+
+  SERVICES.forEach(svc => {
+    if (isOT  && !svc.supOT)  return;
+    if (!isOT && !svc.supSub) return;
+    if (svc.res  && !isRes)   return;
+    if (svc.comm &&  isRes)   return;
+
+    const el = document.createElement('div');
+    el.className  = 'svc-card';
+    el.dataset.id = svc.id;
+    el.innerHTML  = `<div class="sc-icon">${ICONS[svc.id] || ''}</div><div class="sc-name">${svc.name}</div>`;
+    el.onclick    = () => pickService(svc.id, el);
+    grid.appendChild(el);
+  });
+
+  // "Other" card always at end
+  const other = document.createElement('div');
+  other.className = 'svc-card other-card';
+  other.innerHTML = `<div class="sc-icon">${ICONS._other}</div><div class="sc-name">Other / Not Listed</div>`;
+  other.onclick   = () => pickService('_other', other);
+  grid.appendChild(other);
+}
+
+function pickService(id, el) {
+  document.querySelectorAll('#svcGrid .svc-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  S.svcId    = id;
+  S.isCustom = id === '_other';
+  S.answers  = {};
+  document.getElementById('next2').disabled = false;
+}
+
+// ════════════════════════════════════════════════════════════════
+// STEP 3 — BUILD QUESTIONS DYNAMICALLY
+// ════════════════════════════════════════════════════════════════
+function buildQuestions() {
+  const wrap  = document.getElementById('questionsWrap');
+  const cWrap = document.getElementById('customWrap');
+  wrap.innerHTML = '';
+  document.getElementById('next3').disabled = true;
+
+  // "Other" service path — just show text input
+  if (S.isCustom) {
+    cWrap.style.display = 'block';
+    document.getElementById('customInput').value = '';
+    S.customText = '';
+    document.getElementById('s3Ttl').textContent = 'Tell us what you need';
+    return;
+  }
+  cWrap.style.display = 'none';
+
+  const svc = SERVICES.find(s => s.id === S.svcId);
+  document.getElementById('s3Ttl').textContent = svc ? svc.name : 'A couple quick questions';
+
+  // Service description card
+  if (svc && svc.desc) {
+    const card = document.createElement('div');
+    card.className = 'svc-desc-card';
+    card.innerHTML = `<div class="sdc-icon">${ICONS[svc.id] || ''}</div><div><div class="sdc-name">${svc.name}</div><div class="sdc-desc">${svc.desc}</div></div>`;
+    wrap.appendChild(card);
+  }
+
+  const key = S.svcId + '_' + S.mode;
+  const qs  = QUESTIONS[key] || [];
+  S.answers = {};
+
+  qs.forEach(q => {
+    const block = document.createElement('div');
+    block.className = 'q-block';
+
+    const colClass = q.cols ? `cols-${q.cols}` : (q.options.length <= 2 ? '' : q.options.length === 3 ? 'cols-3' : '');
+
+    let html = `<div class="q-label">${q.label}</div>`;
+    if (q.hint) html += `<div class="q-hint">${q.hint}</div>`;
+    html += `<div class="opt-grid ${colClass}" id="qg-${q.id}">`;
+    q.options.forEach(opt => {
+      html += `<div class="opt" data-q="${q.id}" data-v="${opt.v}" onclick="answerQ('${q.id}','${opt.v}',this)">
+        <div class="o-body">
+          <div class="o-name">${opt.l}</div>
+          ${opt.d ? `<div class="o-detail">${opt.d}</div>` : ''}
+        </div>
+        <div class="o-chk"></div>
+      </div>`;
+    });
+    html += '</div>';
+    block.innerHTML = html;
+    wrap.appendChild(block);
+  });
+}
+
+function answerQ(qId, val, el) {
+  el.closest('.opt-grid').querySelectorAll('.opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  S.answers[qId] = val;
+
+  // Enable continue when all questions answered
+  const key = S.svcId + '_' + S.mode;
+  const qs  = QUESTIONS[key] || [];
+  document.getElementById('next3').disabled = !qs.every(q => S.answers[q.id] !== undefined);
+}
+
+function handleCustomInput(val) {
+  S.customText = val.trim();
+  document.getElementById('next3').disabled = S.customText.length === 0;
+}
+
+// ════════════════════════════════════════════════════════════════
+// STEP 4 — CONTACT FORM
+// ════════════════════════════════════════════════════════════════
+function pickHear(val, el) {
+  S.hearAbout = val;
+  document.querySelectorAll('#hearGrid .opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  chkContact();
+}
+
+function chkContact() {
+  const fieldsOk = ['fName','lName','email','phone','addr','jobNotes'].every(id => document.getElementById(id).value.trim());
+  const ok = fieldsOk && !!S.hearAbout;
+  document.getElementById('showEst').disabled = !ok;
+}
+
+function goBackFromContact() {
+  goTo(S.prevStep || 's3');
+}
+
+// ════════════════════════════════════════════════════════════════
+// PRICING CALCULATION — one function, switch/case per service
+// Returns { lo, hi, unit, note }
+// ════════════════════════════════════════════════════════════════
+function calcPrice(svcId, mode, answers) {
+  const P  = PRICES;
+  const ot = mode === 'onetime';
+  let lo, hi, unit = '', note = '';
+
+  switch (svcId) {
+
+    case 'lawn': {
+      if (ot) {
+        [lo, hi] = P.lawn.onetime[answers.lotSize] || [45, 75];
+        unit = 'one-time';
+      } else {
+        const mo = (P.lawn[answers.freq] || P.lawn.biweekly)[answers.lotSize] || 88;
+        const sp = Math.max(3, Math.round(mo * 0.07));
+        lo = mo - sp; hi = mo + sp; unit = '/month';
+      }
+      break;
+    }
+
+    case 'windows': {
+      const panes = P.windows.paneBands[answers.windowBand] || 15;
+      const sMult = P.windows.storyMult[answers.stories]    || 1.0;
+      if (ot) {
+        const r = P.windows.otPerPane[`f${answers.stories}`] || P.windows.otPerPane.f1;
+        lo = Math.max(P.windows.minOT, Math.round(panes * r[0] * sMult));
+        hi = Math.max(P.windows.minOT + 25, Math.round(panes * r[1] * sMult));
+        unit = 'one-time';
+      } else {
+        const moBase = Math.max(P.windows.minSubMo, Math.round(panes * P.windows.subPerPaneMo * sMult));
+        if (answers.freq === 'quarterly') {
+          lo = Math.max(P.windows.minSubMo, Math.round(moBase * P.windows.qtrMult));
+        } else {
+          lo = moBase;
+        }
+        hi = lo + Math.max(5, Math.round(lo * 0.15));
+        unit = '/month';
+      }
+      break;
+    }
+
+    case 'gutters': {
+      const lf    = P.gutters.lfBands[answers.lfBand]       || 125;
+      const is2   = answers.stories === '2story';
+      const sMult = is2 ? P.gutters.story2Mult : 1;
+      const minOT = (P.gutters.minOT[answers.stories])      || 120;
+      if (ot) {
+        lo = Math.max(minOT, Math.round(lf * P.gutters.perLF[0] * sMult));
+        hi = Math.max(minOT + 45, Math.round(lf * P.gutters.perLF[1] * sMult));
+        unit = 'one-time';
+      } else {
+        const div  = P.gutters.subFreqDiv[answers.freq] || 3;
+        const rawLo = Math.max(minOT, Math.round(lf * P.gutters.perLF[0] * sMult));
+        const rawHi = Math.max(minOT + 45, Math.round(lf * P.gutters.perLF[1] * sMult));
+        lo = Math.round(rawLo / div);
+        hi = Math.round(rawHi / div);
+        unit = '/month';
+      }
+      break;
+    }
+
+    case 'pressure': {
+      const sz = answers.size || 'medium';
+      const sc = answers.scope;
+      lo = 0; hi = 0;
+      if (sc === 'house'    || sc === 'both') { lo += P.pressureWash.house[sz][0];    hi += P.pressureWash.house[sz][1]; }
+      if (sc === 'flatwork' || sc === 'both') { lo += P.pressureWash.flatwork[sz][0]; hi += P.pressureWash.flatwork[sz][1]; }
+      unit = 'one-time';
+      break;
+    }
+
+    case 'roof': {
+      const sqft = P.roofClean.sqftBands[answers.roofSize] || 2000;
+      const mat  = P.roofClean.matMult[answers.material]   || 1.0;
+      lo = Math.max(P.roofClean.minPrice, Math.round(sqft * P.roofClean.ratePerSqFt[0] * mat));
+      hi = Math.max(P.roofClean.minPrice + 75, Math.round(sqft * P.roofClean.ratePerSqFt[1] * mat));
+      unit = 'one-time';
+      break;
+    }
+
+    case 'dryervent': {
+      if (ot) {
+        [lo, hi] = P.dryerVent[answers.exitLoc] || [120, 120];
+        unit = 'flat rate';
+      } else {
+        const mo = P.dryerVent.subMo[answers.exitLoc] || 10.00;
+        lo = hi = mo; unit = '/month (annual plan)';
+      }
+      break;
+    }
+
+    case 'petwaste': {
+      if (ot) {
+        [lo, hi] = P.petWaste.otVisit[answers.dogs] || [50, 75];
+        unit = 'per visit';
+      } else {
+        const tbl = { weekly:P.petWaste.subWeekly, biweekly:P.petWaste.subBi, monthly:P.petWaste.subMonthly };
+        const mo  = (tbl[answers.freq] || P.petWaste.subWeekly)[answers.dogs] || 57.16;
+        lo = hi = Math.round(mo); unit = '/month';
+      }
+      break;
+    }
+
+    case 'solar': {
+      const panels = P.solarPanels.panelBands[answers.panelBand] || 15;
+      const add    = answers.roofAccess === '2story' ? P.solarPanels.story2Add : 0;
+      lo = Math.max(P.solarPanels.minPrice, Math.round(panels * P.solarPanels.perPanel[0])) + add;
+      hi = Math.max(P.solarPanels.minPrice + 30, Math.round(panels * P.solarPanels.perPanel[1])) + add;
+      unit = 'one-time';
+      break;
+    }
+
+    case 'graffiti': {
+      const [blo, bhi] = P.graffiti[answers.areaSize] || [100, 200];
+      lo = blo + P.graffiti.mobFee;
+      hi = bhi + P.graffiti.mobFee;
+      unit = 'one-time'; note = 'Includes $50 mobilization fee';
+      break;
+    }
+
+    case 'driveseal': {
+      [lo, hi] = P.drivewaySeal[answers.driveSize] || [200, 350];
+      unit = 'one-time'; note = 'Optional crack fill: +$50 – $150';
+      break;
+    }
+
+    case 'handyman': {
+      const [hlo, hhi] = P.handyman.hrBands[answers.hours] || [2, 2];
+      lo = hlo * P.handyman.rate;
+      hi = hhi * P.handyman.rate;
+      unit = 'one-time'; note = `$${P.handyman.rate}/hr · 1-hr minimum`;
+      break;
+    }
+
+    case 'snowice': {
+      [lo, hi] = P.snowIce[answers.size] || [75, 115];
+      unit = 'per event'; note = 'Includes salt treatment';
+      break;
+    }
+
+    case 'paint': {
+      [lo, hi] = P.paintTouchup[answers.scope] || [125, 175];
+      unit = 'flat rate';
+      break;
+    }
+
+    case 'housewash': {
+      const sqft = P.houseWash.sqftBands[answers.homeSize] || 1800;
+      const div  = P.houseWash.freqDiv[answers.freq]       || 12;
+      lo = Math.max(P.houseWash.minMo, Math.round(sqft * P.houseWash.ratePerSqFt[0] / div));
+      hi = Math.max(P.houseWash.minMo + 5, Math.round(sqft * P.houseWash.ratePerSqFt[1] / div));
+      unit = '/month';
+      break;
+    }
+
+    case 'binclean': {
+      const bins = P.binClean.binBands[answers.bins]         || 1;
+      const rate = P.binClean.perBinMo[answers.freq]         || P.binClean.perBinMo.monthly;
+      lo = hi = Math.round(bins * rate); unit = '/month';
+      break;
+    }
+
+    case 'parkinglot': {
+      const mo = (P.parkingLot[answers.freq] || P.parkingLot.biweekly)[answers.lotSize] || 70;
+      const sp = Math.max(3, Math.round(mo * 0.08));
+      lo = mo - sp; hi = mo + sp; unit = '/month';
+      break;
+    }
+
+    default:
+      lo = 0; hi = 0;
+  }
+
+  return { lo: Math.round(lo), hi: Math.round(hi), unit, note };
+}
+
+// ════════════════════════════════════════════════════════════════
+// SHOW RESULTS
+// ════════════════════════════════════════════════════════════════
+function showResults() {
+  const name  = document.getElementById('fName').value.trim();
+  document.getElementById('resGreet').textContent = `Here's your estimate, ${name} 👋`;
+
+  const stdEl   = document.getElementById('stdResult');
+  const custEl  = document.getElementById('custResult');
+
+  // ── Bundle inquiry path ──
+  if (S.isBundle) {
+    stdEl.style.display   = 'none';
+    custEl.style.display  = 'block';
+    document.getElementById('resTtl').textContent   = "Let's Build Your Plan";
+    document.getElementById('custTitle').textContent = S.bundleWhich === 'tpc'
+      ? 'Total Property Command — Your Specialist Will Be in Touch'
+      : "Total Care Exterior Plan — Let's Build Your Bundle";
+    document.getElementById('custBody').textContent = S.bundleWhich === 'tpc'
+      ? "Total Property Command is a fully custom, fully managed exterior plan. A specialist will reach out to walk through everything included, learn about your property, and build a plan tailored to your schedule and budget."
+      : (() => {
+          const entries = Object.entries(S.bundleServices || {}).map(([id, freq]) => {
+            const s = SERVICES.find(x => x.id === id); return (s ? s.name : id) + (freq ? ' — ' + freq : '');
+          });
+          const svcStr = entries.length ? `Services selected: ${entries.join(', ')}. ` : '';
+          return `${svcStr}We'll reach out to design your custom bundle with one flat monthly rate — locked in for 12 months.`;
+        })();
+    submitLead(S.bundleWhich === 'tpc' ? 'Bundle Inquiry — Total Property Command' : 'Bundle Inquiry — Total Care Exterior Plan');
+    goTo('sResult');
+    return;
+  }
+
+  // ── "Other / Not listed" path ──
+  if (S.isCustom) {
+    stdEl.style.display   = 'none';
+    custEl.style.display  = 'block';
+    document.getElementById('resTtl').textContent    = 'We Have You Covered';
+    document.getElementById('custTitle').textContent  = "We'll prepare your custom quote";
+    document.getElementById('custBody').textContent   = `Service requested: "${S.customText}". One of our specialists will review this and reach out with a custom quote — usually same day.`;
+    submitLead('Custom Service Request');
+    goTo('sResult');
+    return;
+  }
+
+  // ── Standard priced result ──
+  stdEl.style.display   = 'block';
+  custEl.style.display  = 'none';
+  document.getElementById('resTtl').textContent = 'Your Custom Estimate';
+  submitLead('Quote Request');
+
+  const { lo, hi, unit, note } = calcPrice(S.svcId, S.mode, S.answers);
+  const svc = SERVICES.find(s => s.id === S.svcId);
+
+  document.getElementById('rhLabel').textContent = S.mode === 'sub' ? 'Estimated Monthly Rate' : 'Estimated Cost';
+  document.getElementById('rhRange').innerHTML   =
+    lo === hi
+      ? `<span>$</span>${lo.toLocaleString()}`
+      : `<span>$</span>${lo.toLocaleString()}<span> – $${hi.toLocaleString()}</span>`;
+  document.getElementById('rhNote').textContent  = unit + (note ? ' · ' + note : '');
+
+  const svcBadge = document.getElementById('rhSvc');
+  if (svc) { svcBadge.textContent = svc.name; svcBadge.style.display = 'inline-flex'; }
+
+  goTo('sResult');
+}
+
+// ════════════════════════════════════════════════════════════════
+// FORMSPREE LEAD SUBMISSION
+// ════════════════════════════════════════════════════════════════
+function submitLead(actionType) {
+  const endpoint = CONFIG.formspreeEndpoint;
+  if (!endpoint) return;
+
+  // Contact fields
+  const fName    = document.getElementById('fName').value.trim();
+  const lName    = document.getElementById('lName').value.trim();
+  const email    = document.getElementById('email').value.trim();
+  const phone    = document.getElementById('phone').value.trim();
+  const addr     = document.getElementById('addr').value.trim();
+  const jobNotes = document.getElementById('jobNotes').value.trim();
+
+  // Service label
+  const svc = SERVICES.find(s => s.id === S.svcId);
+  const svcName = svc ? svc.name
+    : S.isBundle  ? (S.bundleWhich === 'tpc' ? 'Total Property Command' : 'Total Care Exterior Plan')
+    : S.isCustom  ? 'Other / Not Listed'
+    : '—';
+
+  // Readable answers — look up question + option labels from QUESTIONS config
+  const qKey = `${S.svcId}_${S.mode}`;
+  const qs   = QUESTIONS[qKey] || [];
+  const detailLines = Object.entries(S.answers).map(([k, v]) => {
+    const q    = qs.find(q => q.id === k);
+    const opt  = q?.options?.find(o => o.v === v);
+    return `${q?.label || k}: ${opt?.l || v}`;
+  });
+
+  // Price range string
+  let priceStr = '—';
+  if (!S.isBundle && !S.isCustom && S.svcId) {
+    try {
+      const { lo, hi, unit } = calcPrice(S.svcId, S.mode, S.answers);
+      priceStr = (lo === hi ? `$${lo.toLocaleString()}` : `$${lo.toLocaleString()} – $${hi.toLocaleString()}`);
+      if (unit) priceStr += ` ${unit}`;
+    } catch(e) {}
+  }
+
+  const modeLabel = S.isBundle ? 'Bundle Inquiry'
+    : S.mode === 'sub' ? 'Single-Service Subscription'
+    : 'One-Time Service';
+
+  const payload = {
+    _subject: `New Lead — ${svcName} — ${fName} ${lName}`,
+    _replyto: email,
+    'Name':             `${fName} ${lName}`,
+    'Phone':            phone,
+    'Email':            email,
+    'Address':          addr,
+    'Lead Type':        actionType,
+    'Service':          svcName,
+    'Property Type':    S.propType === 'residential' ? 'Residential' : 'Commercial',
+    'Service Mode':     modeLabel,
+    'Estimate Range':   priceStr,
+    'Property Details': detailLines.length ? detailLines.join(' | ') : '—',
+    'Job Notes':        jobNotes || '—',
+    'How Did You Hear': S.hearAbout || '—',
+  };
+
+  if (S.customText) payload['Custom Request'] = S.customText;
+  if (S.bundleServices && Object.keys(S.bundleServices).length) {
+    const entries = Object.entries(S.bundleServices).map(([id, freq]) => {
+      const s = SERVICES.find(x => x.id === id); return (s ? s.name : id) + (freq ? ' (' + freq + ')' : '');
+    });
+    payload['Bundle Services Selected'] = entries.join(', ');
+  }
+
+  // Fire and forget — never block the UI on a network call
+  fetch(endpoint, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body:    JSON.stringify(payload),
+  }).catch(() => {});
+}
+
+// ════════════════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════════════════
+const PROG_PCT = { s1:25, s2:50, s3:75, s4:88, sBundleSvc:50, sResult:100 };
+const PROG_IDX = { s1:0,  s2:1,  s3:2,  s4:3,  sBundleSvc:1,  sResult:3 };
+
+function goTo(id) {
+  if (id === 's2') buildServiceGrid();
+  if (id === 's3') { buildQuestions(); S.prevStep = 's3'; }
+  if (id === 's4') {
+    S.hearAbout = null;
+    document.querySelectorAll('#hearGrid .opt').forEach(o => o.classList.remove('sel'));
+    chkContact();
+  }
+  // Note: do NOT set S.prevStep here for s4 — it's set before calling goTo('s4')
+  // (either 's3' from normal flow, or 's1' from goBundle())
+
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  updateProgress(PROG_PCT[id] || 25, PROG_IDX[id] ?? 0);
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+function updateProgress(pct, activeIdx) {
+  document.getElementById('progFill').style.width = pct + '%';
+  ['ps1','ps2','ps3','ps4'].forEach((pid, i) => {
+    const el = document.getElementById(pid);
+    el.classList.remove('active','done');
+    if (i === activeIdx) el.classList.add('active');
+    if (i < activeIdx)  el.classList.add('done');
+  });
+}
+
+// ════════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('cfgName').textContent    = CONFIG.companyName;
+  document.getElementById('cfgTagline').textContent = CONFIG.tagline;
+  document.title = 'Get Your Free Estimate – ' + CONFIG.companyName;
+  const logo = document.getElementById('logoMark');
+  if (CONFIG.logoUrl) { logo.innerHTML = `<img src="${CONFIG.logoUrl}" alt="${CONFIG.companyName} logo">`; }
+  else                { logo.textContent = CONFIG.logoText || 'K'; }
+  document.querySelectorAll('.cfg-phone').forEach(el => el.textContent = CONFIG.phone);
+  document.querySelectorAll('.cfg-email').forEach(el => {
+    el.textContent = CONFIG.email;
+    el.href = 'mailto:' + CONFIG.email;
+  });
+  document.querySelectorAll('.cfg-website').forEach(el => {
+    el.textContent = CONFIG.website.replace('https://www.', '');
+    el.href = CONFIG.website;
+  });
+  document.querySelectorAll('.cfg-legal').forEach(el => el.textContent = CONFIG.legalName);
+});
+
+if (new URLSearchParams(window.location.search).get('embed') === '1') {
+  document.body.classList.add('embed');
+}
+</script>
+</body>
+</html>
