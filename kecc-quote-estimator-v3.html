@@ -490,12 +490,11 @@ const CONFIG = {
 const PRICES = {
 
   // LAWN CARE — priced by lot acreage tier
-  // onetime = per-visit [lo, hi] | recurring = flat $/month
+  // onetime = per-visit [lo, hi] | recurring = [lo, hi] $/month
   lawn: {
-    onetime:  { small:[35,55],  medium:[45,75],  large:[65,115], xlarge:[100,175], jumbo:[150,275] },
-    weekly:   { small:133,      medium:171,       large:248,      xlarge:381,       jumbo:572 },
-    biweekly: { small:68,       medium:88,        large:127,      xlarge:195,       jumbo:293 },
-    monthly:  { small:32,       medium:41,        large:60,       xlarge:92,        jumbo:138 },
+    onetime:  { small:[35,55],       medium:[45,75],      large:[65,115],     xlarge:[100,175],   jumbo:[150,275]  },
+    biweekly: { small:[150,210],     medium:[175,260],    large:[220,330],    xlarge:[275,415],   jumbo:[360,550]  },
+    weekly:   { small:[240,325],     medium:[290,420],    large:[360,530],    xlarge:[445,660],   jumbo:[585,880]  },
   },
 
   // WINDOW CLEANING — priced per pane, by floor level
@@ -715,7 +714,6 @@ const QUESTIONS = {
     { id:'freq', label:'How often?', options:[
       { v:'weekly',   l:'Weekly',   d:'Most thorough coverage' },
       { v:'biweekly', l:'Bi-Weekly',d:'Most popular' },
-      { v:'monthly',  l:'Monthly',  d:'Once a month' },
     ]},
   ],
 
@@ -1241,9 +1239,10 @@ function calcPrice(svcId, mode, answers) {
         [lo, hi] = P.lawn.onetime[answers.lotSize] || [45, 75];
         unit = 'one-time';
       } else {
-        const mo = (P.lawn[answers.freq] || P.lawn.biweekly)[answers.lotSize] || 88;
-        const sp = Math.max(3, Math.round(mo * 0.07));
-        lo = mo - sp; hi = mo + sp; unit = '/month';
+        const band = (P.lawn[answers.freq] || P.lawn.biweekly)[answers.lotSize] || [150, 210];
+        lo = Math.max(150, band[0]);
+        hi = Math.max(150, band[1]);
+        unit = '/month';
       }
       break;
     }
