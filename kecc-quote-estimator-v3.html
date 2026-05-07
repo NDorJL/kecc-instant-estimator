@@ -502,11 +502,14 @@ const PRICES = {
   windows: {
     paneBands:    { lt10:8,  to20:15, to35:27, gt35:45 },
     otPerPane:    { f1:[5,6], f2:[7,9], f3:[10,13] },  // [lo, hi] per pane by floor
-    subPerPaneMo: 2.80,                                 // $/pane/month (monthly sub base)
-    storyMult:    { '1':1.0, '2':1.30, '3':1.65 },     // story-level premium multiplier
-    qtrMult:      0.28,   // quarterly expressed as $/month (≈28% of monthly rate)
+    storyMult:    { '1':1.0, '2':1.30, '3':1.65 },     // OT story multiplier
     minOT:        75,
-    minSubMo:     12,
+    // Subscription [lo, hi] $/month by window band — monthly billed 12x/yr, quarterly billed 4x/yr
+    sub: {
+      monthly:   { lt10:[80,120],  to20:[100,150], to35:[145,215], gt35:[200,300] },
+      quarterly: { lt10:[30,45],   to20:[38,58],   to35:[55,82],   gt35:[75,112]  },
+    },
+    subStoryMult: { '1':1.0, '2':1.25, '3':1.55 },
   },
 
   // GUTTER CLEANING — priced per linear foot
@@ -546,10 +549,13 @@ const PRICES = {
   // PET WASTE REMOVAL — priced per visit by dog count
   // otVisit = single visit [lo, hi] | sub = flat $/month by frequency
   petWaste: {
-    otVisit:    { d1:[50,75],  d2:[70,100], d3:[70,100] },
-    subWeekly:  { d1:57.16,   d2:94.51,    d3:128.70 },
-    subBi:      { d1:29.95,   d2:49.50,    d3:67.50  },
-    subMonthly: { d1:14.25,   d2:23.54,    d3:32.13  },
+    otVisit: { d1:[50,75], d2:[70,100], d3:[70,100] },
+    // Subscription [lo, hi] $/month by dog count and frequency
+    sub: {
+      weekly:   { d1:[80,100],  d2:[105,135], d3:[130,165] },
+      biweekly: { d1:[50,65],   d2:[65,85],   d3:[85,110]  },
+      monthly:  { d1:[30,42],   d2:[40,55],   d3:[52,70]   },
+    },
   },
 
   // SOLAR PANEL CLEANING — priced per panel
@@ -614,10 +620,11 @@ const PRICES = {
   },
 
   // PARKING LOT SWEEPING SUBSCRIPTION — commercial only, by lot size + frequency
+  // PARKING LOT SWEEPING — [lo, hi] $/month by lot size + frequency
   parkingLot: {
-    weekly:   { small:80, medium:110, large:150, xlarge:200, jumbo:280 },
-    biweekly: { small:50, medium:70,  large:95,  xlarge:130, jumbo:175 },
-    monthly:  { small:30, medium:40,  large:55,  xlarge:75,  jumbo:100 },
+    weekly:   { small:[110,155], medium:[165,235], large:[255,360], xlarge:[385,545], jumbo:[555,795] },
+    biweekly: { small:[75,105],  medium:[110,155], large:[165,235], xlarge:[250,355], jumbo:[360,515] },
+    monthly:  { small:[50,70],   medium:[75,105],  large:[110,155], xlarge:[165,235], jumbo:[240,340] },
   },
 };
 
@@ -656,13 +663,13 @@ const SERVICES = [
     desc:'Mowing, edging, string trimming, and blowdown. Priced by lot acreage.' },
   { id:'windows',    name:'Window Cleaning',         supOT:true,  supSub:true,
     desc:'Streak-free interior & exterior window cleaning. Priced per pane by floor level.' },
-  { id:'gutters',    name:'Gutter Cleaning',         supOT:true,  supSub:true,
+  { id:'gutters',    name:'Gutter Cleaning',         supOT:true,  supSub:false,
     desc:'Debris removal, flush, and flow check. Priced by linear feet of gutter.' },
   { id:'pressure',   name:'Pressure Washing',        supOT:true,  supSub:false,
     desc:'House soft wash and/or flatwork (driveway, patio, walkways). Priced by surface square footage.' },
   { id:'roof',       name:'Roof Cleaning',           supOT:true,  supSub:false,
     desc:'Soft-wash treatment to eliminate algae, moss, and staining. Priced by roof square footage.' },
-  { id:'dryervent',  name:'Dryer Vent Cleaning',     supOT:true,  supSub:true,  res:true,
+  { id:'dryervent',  name:'Dryer Vent Cleaning',     supOT:true,  supSub:false, res:true,
     desc:'Full vent line clearing to restore airflow and reduce fire risk. Flat rate by vent exit location.' },
   { id:'petwaste',   name:'Pet Waste Cleanup',       supOT:true,  supSub:true,  res:true,
     desc:'Full yard pickup and disposal. Priced per visit by number of dogs.' },
@@ -678,9 +685,9 @@ const SERVICES = [
     desc:'Per-event driveway clearing, walkway shoveling, and salt application. Priced by property size.' },
   { id:'paint',      name:'Paint Touch-Up',          supOT:true,  supSub:false, res:true,
     desc:'Spot repairs and touch-ups on exterior trim, siding, or doors. Flat rate by scope of work.' },
-  { id:'housewash',  name:'Exterior / House Wash',   supOT:false, supSub:true,
+  { id:'housewash',  name:'Exterior / House Wash',   supOT:true,  supSub:false,
     desc:'Recurring soft-wash subscription to keep your home\'s exterior clean year-round. Priced per square foot of exterior surface.' },
-  { id:'binclean',   name:'Bin Cleaning',            supOT:false, supSub:true,
+  { id:'binclean',   name:'Bin Cleaning',            supOT:true,  supSub:false,
     desc:'Pressure wash and deodorize trash and recycling bins. Priced per bin per service.' },
   { id:'parkinglot', name:'Parking Lot Sweeping',    supOT:false, supSub:true,  comm:true,
     desc:'Regular mechanical sweeping to keep your lot clean and compliant. Priced by lot size and frequency.' },
@@ -1256,13 +1263,10 @@ function calcPrice(svcId, mode, answers) {
         hi = Math.max(P.windows.minOT + 25, Math.round(panes * r[1] * sMult));
         unit = 'one-time';
       } else {
-        const moBase = Math.max(P.windows.minSubMo, Math.round(panes * P.windows.subPerPaneMo * sMult));
-        if (answers.freq === 'quarterly') {
-          lo = Math.max(P.windows.minSubMo, Math.round(moBase * P.windows.qtrMult));
-        } else {
-          lo = moBase;
-        }
-        hi = lo + Math.max(5, Math.round(lo * 0.15));
+        const band  = (P.windows.sub[answers.freq] || P.windows.sub.monthly)[answers.windowBand] || [100, 150];
+        const sMult2 = P.windows.subStoryMult[answers.stories] || 1.0;
+        lo = Math.round(band[0] * sMult2);
+        hi = Math.round(band[1] * sMult2);
         unit = '/month';
       }
       break;
@@ -1323,9 +1327,8 @@ function calcPrice(svcId, mode, answers) {
         [lo, hi] = P.petWaste.otVisit[answers.dogs] || [50, 75];
         unit = 'per visit';
       } else {
-        const tbl = { weekly:P.petWaste.subWeekly, biweekly:P.petWaste.subBi, monthly:P.petWaste.subMonthly };
-        const mo  = (tbl[answers.freq] || P.petWaste.subWeekly)[answers.dogs] || 57.16;
-        lo = hi = Math.round(mo); unit = '/month';
+        const band = (P.petWaste.sub[answers.freq] || P.petWaste.sub.weekly)[answers.dogs] || [80, 100];
+        [lo, hi] = band; unit = '/month';
       }
       break;
     }
@@ -1390,9 +1393,8 @@ function calcPrice(svcId, mode, answers) {
     }
 
     case 'parkinglot': {
-      const mo = (P.parkingLot[answers.freq] || P.parkingLot.biweekly)[answers.lotSize] || 70;
-      const sp = Math.max(3, Math.round(mo * 0.08));
-      lo = mo - sp; hi = mo + sp; unit = '/month';
+      const band = (P.parkingLot[answers.freq] || P.parkingLot.biweekly)[answers.lotSize] || [110, 155];
+      [lo, hi] = band; unit = '/month';
       break;
     }
 
