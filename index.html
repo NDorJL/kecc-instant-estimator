@@ -467,6 +467,16 @@ body.embed            { background:transparent; min-height:unset; }
 </div><!-- /container -->
 
 <script>
+// ── UTM capture — runs once on page load, before anything else ───────────────
+const _utmQ = new URLSearchParams(window.location.search);
+const utmParams = {
+  utm_source:   _utmQ.get('utm_source')   ?? '',
+  utm_medium:   _utmQ.get('utm_medium')   ?? '',
+  utm_campaign: _utmQ.get('utm_campaign') ?? '',
+  utm_content:  _utmQ.get('utm_content')  ?? '',
+  utm_term:     _utmQ.get('utm_term')     ?? '',
+};
+
 // ════════════════════════════════════════════════════════════════
 // ✏️  BRANDING CONFIG — Edit this block to update company info
 // ════════════════════════════════════════════════════════════════
@@ -1540,6 +1550,13 @@ function submitLead(actionType) {
     });
     payload['Bundle Services Selected'] = entries.join(', ');
   }
+
+  // Append UTM parameters captured on page load
+  payload['utm_source']   = utmParams.utm_source;
+  payload['utm_medium']   = utmParams.utm_medium;
+  payload['utm_campaign'] = utmParams.utm_campaign;
+  payload['utm_content']  = utmParams.utm_content;
+  payload['utm_term']     = utmParams.utm_term;
 
   // Fire and forget — never block the UI on a network call
   fetch(endpoint, {
