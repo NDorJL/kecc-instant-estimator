@@ -477,6 +477,20 @@ const utmParams = {
   utm_term:     _utmQ.get('utm_term')     ?? '',
 };
 
+// ── postMessage listener (when embedded as iframe on Squarespace) ─────────────
+// Cookies don't cross domains. The parent Squarespace page sends tracking
+// data via postMessage so this form can include it in the submission.
+// This overwrites the URL-based UTM params (which are empty in an iframe).
+const _keccTracking = { campaignId: null, referrer: null };
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'kecc-tracking') return;
+  if (e.data.utmSource)   utmParams.utm_source   = e.data.utmSource;
+  if (e.data.utmMedium)   utmParams.utm_medium   = e.data.utmMedium;
+  if (e.data.utmCampaign) utmParams.utm_campaign = e.data.utmCampaign;
+  _keccTracking.campaignId = e.data.campaignId || null;
+  _keccTracking.referrer   = e.data.referrer   || null;
+});
+
 // ════════════════════════════════════════════════════════════════
 // ✏️  BRANDING CONFIG — Edit this block to update company info
 // ════════════════════════════════════════════════════════════════
@@ -1551,12 +1565,16 @@ function submitLead(actionType) {
     payload['Bundle Services Selected'] = entries.join(', ');
   }
 
-  // Append UTM parameters captured on page load
+  // Append UTM parameters (from URL or postMessage if embedded as iframe)
   payload['utm_source']   = utmParams.utm_source;
   payload['utm_medium']   = utmParams.utm_medium;
   payload['utm_campaign'] = utmParams.utm_campaign;
   payload['utm_content']  = utmParams.utm_content;
   payload['utm_term']     = utmParams.utm_term;
+
+  // Campaign tracking (UUID from cookie, passed via postMessage when iframe)
+  if (_keccTracking.campaignId) payload['campaign_id'] = _keccTracking.campaignId;
+  if (_keccTracking.referrer)   payload['Referrer']    = _keccTracking.referrer;
 
   // Fire and forget — never block the UI on a network call
   fetch(endpoint, {

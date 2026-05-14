@@ -23,7 +23,9 @@ Deno.serve(async (req: Request) => {
   const estimateStr = (payload['Estimate Range'] || '').trim();
   const propDetails = (payload['Property Details'] || '').trim();
   const jobNotes = (payload['Job Notes'] || '').trim();
-  const hearAbout = (payload['How Did You Hear'] || '').trim();
+  const hearAbout    = (payload['How Did You Hear'] || '').trim();
+  const rawCampaignId = (payload['campaign_id']   || '').trim() || null;
+  const utmCampaign   = (payload['utm_campaign']  || '').trim() || null;
   const customReq = (payload['Custom Request'] || '').trim();
   const bundleSvcs = (payload['Bundle Services Selected'] || '').trim();
   if (!name || !email) return new Response(JSON.stringify({ error: 'Missing name or email' }), { status: 422 });
@@ -40,6 +42,20 @@ Deno.serve(async (req: Request) => {
   if (customReq) notesParts.push(`Custom Request: ${customReq}`);
   if (jobNotes && jobNotes !== '\u2014') notesParts.push(`Job Notes: ${jobNotes}`);
   const leadNotes = notesParts.join('\n');
+  // ── Resolve campaign ID ────────────────────────────────────────────────────
+  // Priority: explicit UUID → UTM slug lookup → Website/Organic fallback
+  const ORGANIC_CAMPAIGN_ID = '8548a349-4fc0-48db-b5a0-cd49f7c94e16';
+  let campaignId: string | null = rawCampaignId;
+  if (!campaignId && utmCampaign) {
+    const camRes = await query(
+      `campaigns?utm_campaign=eq.${encodeURIComponent(utmCampaign)}&select=id&limit=1`, 'GET'
+    );
+    if (camRes.ok && Array.isArray(camRes.data) && camRes.data.length > 0) {
+      campaignId = camRes.data[0].id;
+    }
+  }
+  if (!campaignId) campaignId = ORGANIC_CAMPAIGN_ID;
+
   let contactId: string | null = null;
   const existing = await query(`contacts?email=eq.${encodeURIComponent(email)}&select=id&limit=1`, 'GET');
   if (existing.ok && Array.isArray(existing.data) && existing.data.length > 0) {
@@ -48,7 +64,7 @@ Deno.serve(async (req: Request) => {
     const created = await query('contacts', 'POST', { name, email: email || null, phone: phone || null, type: propType.startsWith('commercial') ? 'commercial' : 'residential', source: hearAbout || 'Instant Estimator', notes: address || null, tags: ['web-lead'], has_left_review: false });
     if (created.ok && Array.isArray(created.data) && created.data.length > 0) contactId = created.data[0].id;
   }
-  const leadResult = await query('leads', 'POST', { contact_id: contactId, stage: 'new', source: hearAbout || 'Instant Estimator', service_interest: service || null, estimated_value: estimatedValue, notes: leadNotes || null, photo_stacks: [] });
+  const leadResult = await query('leads', 'POST', { contact_id: contactId, stage: 'new', source: hearAbout || 'website', service_interest: service || null, estimated_value: estimatedValue, campaign_id: campaignId, notes: leadNotes || null, photo_stacks: [] });
   if (!leadResult.ok) return new Response(JSON.stringify({ error: 'Lead creation failed', detail: leadResult.data }), { status: 500 });
   const leadId = Array.isArray(leadResult.data) ? leadResult.data[0]?.id : null;
   return new Response(JSON.stringify({ success: true, contactId, leadId }), { status: 200, headers: { 'Content-Type': 'application/json' } });
