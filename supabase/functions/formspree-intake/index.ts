@@ -44,7 +44,9 @@ Deno.serve(async (req: Request) => {
   const leadNotes = notesParts.join('\n');
   // ── Resolve campaign ID ────────────────────────────────────────────────────
   // Priority: explicit UUID → UTM slug lookup → Website/Organic fallback
-  const ORGANIC_CAMPAIGN_ID = '8548a349-4fc0-48db-b5a0-cd49f7c94e16';
+  // Contact Form campaign — separate from Website/Organic (click tracking)
+  // so submissions vs clicks can be compared as a conversion rate.
+  const ORGANIC_CAMPAIGN_ID = '9f0ac3ec-2ed2-4dc3-8745-af674dad3ac1';
   let campaignId: string | null = rawCampaignId;
   if (!campaignId && utmCampaign) {
     const camRes = await query(
