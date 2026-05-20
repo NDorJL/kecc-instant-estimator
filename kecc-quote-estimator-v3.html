@@ -1546,6 +1546,10 @@ function submitLead(actionType) {
     method:  'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body:    JSON.stringify(payload),
+  }).then(function(res) {
+    if (res.ok) {
+      window.parent.postMessage({ type: 'kecc-quote-submitted' }, 'https://www.knoxexteriorcare.com');
+    }
   }).catch(() => {});
 }
 
