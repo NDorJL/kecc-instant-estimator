@@ -58,6 +58,19 @@ Deno.serve(async (req: Request) => {
   }
   if (!campaignId) campaignId = ORGANIC_CAMPAIGN_ID;
 
+  // Verify the resolved campaign actually exists. If the fallback UUID hasn't
+  // been created as a row in the campaigns table, the lead insert below would
+  // fail the FK constraint and Formspree's webhook would log an error with no
+  // trace in the CRM. Defensive: re-resolve to null so the insert still works.
+  if (campaignId) {
+    const verify = await query(`campaigns?id=eq.${campaignId}&select=id&limit=1`, 'GET');
+    const exists = verify.ok && Array.isArray(verify.data) && verify.data.length > 0;
+    if (!exists) {
+      console.warn(`[formspree-intake] campaign_id ${campaignId} not found in campaigns table — falling back to null`);
+      campaignId = null;
+    }
+  }
+
   let contactId: string | null = null;
   const existing = await query(`contacts?email=eq.${encodeURIComponent(email)}&select=id&limit=1`, 'GET');
   if (existing.ok && Array.isArray(existing.data) && existing.data.length > 0) {

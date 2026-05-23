@@ -997,7 +997,48 @@ const S = {
   bundleServices: [],     // selected service ids for tcep
   quoteType:      null,   // 'psr' | 'instant'
   prevStep:       's3',
+  // ── Campaign tracking, injected by parent page via postMessage on iframe load ──
+  // The parent reads cookies set by /track redirects on its own domain and posts
+  // them in here. Cookies don't cross domains (kecc-estimator.netlify.app cookies
+  // are invisible to this app), so this postMessage bridge is required.
+  tracking: {
+    campaignId:  null,
+    utmSource:   null,
+    utmMedium:   null,
+    utmCampaign: null,
+    gclid:       null,
+    referrer:    null,
+  },
 };
+
+// ── Receive tracking payload from parent ──────────────────────────────────────
+// Parent embeds this iframe and posts a `kecc-tracking` message on load.
+// We accept messages from any origin (the form may be embedded on multiple
+// landing pages) but only consume the kecc-tracking type to ignore noise.
+window.addEventListener('message', function(e) {
+  var d = e && e.data;
+  if (!d || d.type !== 'kecc-tracking') return;
+  S.tracking.campaignId  = d.campaignId  || null;
+  S.tracking.utmSource   = d.utmSource   || null;
+  S.tracking.utmMedium   = d.utmMedium   || null;
+  S.tracking.utmCampaign = d.utmCampaign || null;
+  S.tracking.gclid       = d.gclid       || null;
+  S.tracking.referrer    = d.referrer    || null;
+});
+
+// Also surface URL params directly — if someone hits the form URL with
+// ?utm_source=... or ?gclid=... in the address (e.g. linked directly from a
+// Google Ad, not embedded), use those. Cookie-bridged values from the parent
+// take precedence since they reflect the visitor's full journey.
+(function captureUrlParams() {
+  try {
+    var qs = new URLSearchParams(window.location.search);
+    var src = qs.get('utm_source');   if (src && !S.tracking.utmSource)   S.tracking.utmSource   = src;
+    var med = qs.get('utm_medium');   if (med && !S.tracking.utmMedium)   S.tracking.utmMedium   = med;
+    var cam = qs.get('utm_campaign'); if (cam && !S.tracking.utmCampaign) S.tracking.utmCampaign = cam;
+    var gcl = qs.get('gclid');        if (gcl && !S.tracking.gclid)       S.tracking.gclid       = gcl;
+  } catch (_e) { /* non-fatal */ }
+})();
 
 // ════════════════════════════════════════════════════════════════
 // HELPERS
@@ -1531,6 +1572,16 @@ function submitLead(actionType) {
     'Property Details': detailLines.length ? detailLines.join(' | ') : '—',
     'Job Notes':        jobNotes || '—',
     'How Did You Hear': S.hearAbout || '—',
+    // ── Tracking fields ─────────────────────────────────────────────────────
+    // Pulled from postMessage (parent page) or this iframe's URL params.
+    // The Supabase formspree-intake function reads `campaign_id` and
+    // `utm_campaign` to attribute the lead to the right marketing campaign.
+    'campaign_id':  S.tracking.campaignId  || '',
+    'utm_source':   S.tracking.utmSource   || '',
+    'utm_medium':   S.tracking.utmMedium   || '',
+    'utm_campaign': S.tracking.utmCampaign || '',
+    'gclid':        S.tracking.gclid       || '',
+    'referrer':     S.tracking.referrer    || '',
   };
 
   if (S.customText) payload['Custom Request'] = S.customText;
