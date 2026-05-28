@@ -415,7 +415,7 @@ body.embed            { background:transparent; min-height:unset; }
           <div class="rh-svc"   id="rhSvc" style="display:none"></div>
         </div>
         <div class="disclaimer">
-          <strong>Ballpark range only — not a final quote.</strong> A specialist will confirm your exact price after reviewing your property.
+          <strong>This is a starting price, not a final quote.</strong> Final pricing is determined by property specifics, volume of work, condition, access, and any additional services. Your specialist will confirm your exact price after reviewing the details you provided.
         </div>
       </div>
 
@@ -1502,11 +1502,8 @@ function showResults() {
   const { lo, hi, unit, note } = calcPrice(S.svcId, S.mode, S.answers);
   const svc = SERVICES.find(s => s.id === S.svcId);
 
-  document.getElementById('rhLabel').textContent = S.mode === 'sub' ? 'Estimated Monthly Rate' : 'Estimated Cost';
-  document.getElementById('rhRange').innerHTML   =
-    lo === hi
-      ? `<span>$</span>${lo.toLocaleString()}`
-      : `<span>$</span>${lo.toLocaleString()}<span> – $${hi.toLocaleString()}</span>`;
+  document.getElementById('rhLabel').textContent = S.mode === 'sub' ? 'Monthly Rate Starting At' : 'Pricing Starts At';
+  document.getElementById('rhRange').innerHTML   = `<span>$</span>${lo.toLocaleString()}<span>+</span>`;
   document.getElementById('rhNote').textContent  = unit + (note ? ' · ' + note : '');
 
   const svcBadge = document.getElementById('rhSvc');
